@@ -47,3 +47,22 @@ def update_profile():
         current_app.logger.error(f'Update profile error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
 
+@users_bp.route('/<string:user_id>', methods=['GET'])
+def get_user(user_id):
+    try:
+        user = User.query.filter_by(public_id=user_id).first()
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        # Get user's posts
+        posts = Post.query.filter_by(author_id=user.id).order_by(Post.created_at.desc()).limit(10).all()
+        
+        user_data = user.to_dict()
+        user_data['recent_posts'] = [post.to_dict() for post in posts]
+        
+        return jsonify({'user': user_data}), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get user error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
