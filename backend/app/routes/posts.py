@@ -86,3 +86,119 @@ def create_post():
         db.session.rollback()
         current_app.logger.error(f'Create post error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@posts_bp.route('/<string:post_id>', methods=['GET'])
+def get_post(post_id):
+    try:
+        post = Post.query.filter_by(public_id=post_id).first()
+        
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+        
+        return jsonify({'post': post.to_dict()}), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get post error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
+
+@posts_bp.route('/<string:post_id>', methods=['PUT'])
+@jwt_required()
+def update_post(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        post = Post.query.filter_by(public_id=post_id).first()
+        
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+        
+        # Check ownership
+        if post.author_id != user.id and user.user_type != 'admin':
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        data = request.get_json()
+        
+        # Update fields
+        if 'title' in data:
+            post.title = data['title']
+        if 'content' in data:
+            post.content = data['content']
+        if 'category' in data:
+            post.category = data['category']
+        if 'tags' in data:
+            post.tags = data['tags']
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Post updated successfully',
+            'post': post.to_dict()
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Update post error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
+
+@posts_bp.route('/<string:post_id>', methods=['DELETE'])
+@jwt_required()
+def delete_post(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        post = Post.query.filter_by(public_id=post_id).first()
+        
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+        
+        # Check ownership
+        if post.author_id != user.id and user.user_type != 'admin':
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        db.session.delete(post)
+        db.session.commit()
+        
+        return jsonify({'message': 'Post deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Delete post error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
+
+@posts_bp.route('/<string:post_id>/like', methods=['POST'])
+@jwt_required()
+def toggle_like(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        post = Post.query.filter_by(public_id=post_id).first()
+        
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+        
+        # Check if already liked
+        existing_like = Like.query.filter_by(post_id=post.id, user_id=user.id).first()
+        
+        if existing_like:
+            # Unlike
+            db.session.delete(existing_like)
+            post.like_count -= 1
+            liked = False
+        else:
+            # Like
+            new_like = Like(post_id=post.id, user_id=user.id)
+            db.session.add(new_like)
+            post.like_count += 1
+            liked = True
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Post liked' if liked else 'Post unliked',
+            'liked': liked,
+            'like_count': post.like_count
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Like error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
