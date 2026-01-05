@@ -67,7 +67,7 @@ def get_user(user_id):
         current_app.logger.error(f'Get user error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
     
- @users_bp.route('/search', methods=['GET'])
+@users_bp.route('/search', methods=['GET'])
 def search_users():
     try:
         query = request.args.get('q', '')
