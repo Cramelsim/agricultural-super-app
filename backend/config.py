@@ -12,3 +12,14 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max upload
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     
+class DevelopmentConfig(Config):
+    DEBUG = True
+    
+class ProductionConfig(Config):
+    DEBUG = False
+    
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
