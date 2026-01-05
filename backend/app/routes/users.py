@@ -66,3 +66,40 @@ def get_user(user_id):
     except Exception as e:
         current_app.logger.error(f'Get user error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+ @users_bp.route('/search', methods=['GET'])
+def search_users():
+    try:
+        query = request.args.get('q', '')
+        user_type = request.args.get('type')
+        location = request.args.get('location')
+        
+        if not query and not user_type and not location:
+            return jsonify({'error': 'Search query required'}), 400
+        
+        search_query = User.query.filter(User.is_active == True)
+        
+        if query:
+            search_query = search_query.filter(
+                (User.username.ilike(f'%{query}%')) |
+                (User.full_name.ilike(f'%{query}%')) |
+                (User.bio.ilike(f'%{query}%')) |
+                (User.expertise_area.ilike(f'%{query}%'))
+            )
+        
+        if user_type:
+            search_query = search_query.filter_by(user_type=user_type)
+        
+        if location:
+            search_query = search_query.filter(User.location.ilike(f'%{location}%'))
+        
+        users = search_query.limit(50).all()
+        
+        return jsonify({
+            'users': [user.to_dict() for user in users],
+            'count': len(users)
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Search users error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500   
