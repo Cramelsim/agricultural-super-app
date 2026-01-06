@@ -85,3 +85,36 @@ def get_following():
     except Exception as e:
         current_app.logger.error(f'Get following error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+@follows_bp.route('/followers', methods=['GET'])
+@jwt_required()
+def get_followers():
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        
+        # Get followers
+        followers = Follow.query.filter_by(following_id=user.id).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        follower_users = []
+        for follow in followers.items:
+            follower_user = User.query.get(follow.follower_id)
+            if follower_user:
+                follower_users.append(follower_user.to_dict())
+        
+        return jsonify({
+            'followers': follower_users,
+            'total': followers.total,
+            'page': followers.page,
+            'per_page': followers.per_page,
+            'pages': followers.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get followers error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
