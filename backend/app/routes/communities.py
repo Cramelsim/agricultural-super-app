@@ -166,3 +166,35 @@ def join_community(community_id):
         db.session.rollback()
         current_app.logger.error(f'Join community error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@communities_bp.route('/<string:community_id>/members', methods=['GET'])
+def get_community_members(community_id):
+    try:
+        community = Community.query.filter_by(public_id=community_id).first()
+        
+        if not community:
+            return jsonify({'error': 'Community not found'}), 404
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 50, type=int)
+        
+        members = CommunityMember.query.filter_by(
+            community_id=community.id
+        ).paginate(page=page, per_page=per_page, error_out=False)
+        
+        member_users = []
+        for member in members.items:
+            user = User.query.get(member.user_id)
+            if user:
+                member_users.append(user.to_dict())
+        
+        return jsonify({
+            'members': member_users,
+            'total': members.total,
+            'page': members.page,
+            'per_page': members.per_page,
+            'pages': members.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get community members error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
