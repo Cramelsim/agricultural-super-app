@@ -101,3 +101,33 @@ def update_comment(comment_id):
         db.session.rollback()
         current_app.logger.error(f'Update comment error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+@comments_bp.route('/<string:comment_id>', methods=['DELETE'])
+@jwt_required()
+def delete_comment(comment_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        comment = Comment.query.filter_by(public_id=comment_id).first()
+        
+        if not comment:
+            return jsonify({'error': 'Comment not found'}), 404
+        
+        # Check ownership
+        if comment.user_id != user.id and user.user_type != 'admin':
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        # Update comment count on post
+        post = Post.query.get(comment.post_id)
+        if post:
+            post.comment_count = max(0, post.comment_count - 1)
+        
+        db.session.delete(comment)
+        db.session.commit()
+        
+        return jsonify({'message': 'Comment deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Delete comment error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
