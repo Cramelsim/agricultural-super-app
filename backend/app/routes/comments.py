@@ -31,3 +31,41 @@ def get_comments(post_id):
     except Exception as e:
         current_app.logger.error(f'Get comments error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+@comments_bp.route('/post/<string:post_id>', methods=['POST'])
+@jwt_required()
+def create_comment(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        post = Post.query.filter_by(public_id=post_id).first()
+        
+        if not user or not post:
+            return jsonify({'error': 'User or post not found'}), 404
+        
+        data = request.get_json()
+        
+        if not data.get('content'):
+            return jsonify({'error': 'Comment content is required'}), 400
+        
+        comment = Comment(
+            post_id=post.id,
+            user_id=user.id,
+            content=data['content']
+        )
+        
+        # Update comment count on post
+        post.comment_count += 1
+        
+        db.session.add(comment)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Comment added successfully',
+            'comment': comment.to_dict()
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Create comment error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
