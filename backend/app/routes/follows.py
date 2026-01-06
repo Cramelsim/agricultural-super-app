@@ -118,3 +118,26 @@ def get_followers():
     except Exception as e:
         current_app.logger.error(f'Get followers error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@follows_bp.route('/check/<string:user_id>', methods=['GET'])
+@jwt_required()
+def check_follow(user_id):
+    try:
+        current_user_id = get_jwt_identity()
+        current_user = User.query.filter_by(public_id=current_user_id).first()
+        target_user = User.query.filter_by(public_id=user_id).first()
+        
+        if not current_user or not target_user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        is_following = Follow.query.filter_by(
+            follower_id=current_user.id,
+            following_id=target_user.id
+        ).first() is not None
+        
+        return jsonify({
+            'is_following': is_following
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Check follow error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
