@@ -94,3 +94,31 @@ def create_community():
         db.session.rollback()
         current_app.logger.error(f'Create community error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+@communities_bp.route('/<string:community_id>', methods=['GET'])
+def get_community(community_id):
+    try:
+        community = Community.query.filter_by(public_id=community_id).first()
+        
+        if not community:
+            return jsonify({'error': 'Community not found'}), 404
+        
+        # Get recent posts in this community
+        posts = Post.query.filter_by(category=community.name).order_by(
+            Post.created_at.desc()
+        ).limit(10).all()
+        
+        # Get member count
+        member_count = CommunityMember.query.filter_by(
+            community_id=community.id
+        ).count()
+        
+        community_data = community.to_dict()
+        community_data['recent_posts'] = [post.to_dict() for post in posts]
+        community_data['member_count'] = member_count
+        
+        return jsonify({'community': community_data}), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get community error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
