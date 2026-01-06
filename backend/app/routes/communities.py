@@ -36,3 +36,61 @@ def get_communities():
     except Exception as e:
         current_app.logger.error(f'Get communities error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+@communities_bp.route('/', methods=['POST'])
+@jwt_required()
+def create_community():
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        data = request.form.to_dict()
+        
+        if not data.get('name'):
+            return jsonify({'error': 'Community name is required'}), 400
+        
+        # Check if community name exists
+        existing = Community.query.filter_by(name=data['name']).first()
+        if existing:
+            return jsonify({'error': 'Community name already exists'}), 409
+        
+        # Handle image upload
+        image_url = None
+        if 'image' in request.files:
+            file = request.files['image']
+            from app.utils.helpers import save_image, allowed_file
+            if file and allowed_file(file.filename):
+                filename = save_image(file)
+                image_url = f'/uploads/{filename}'
+        
+        community = Community(
+            name=data['name'],
+            description=data.get('description', ''),
+            admin_id=user.id,
+            image_url=image_url,
+            is_public=data.get('is_public', 'true').lower() == 'true'
+        )
+        
+        db.session.add(community)
+        
+        # Add creator as first member
+        membership = CommunityMember(
+            community_id=community.id,
+            user_id=user.id
+        )
+        db.session.add(membership)
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Community created successfully',
+            'community': community.to_dict()
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Create community error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
