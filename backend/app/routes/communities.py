@@ -122,3 +122,47 @@ def get_community(community_id):
     except Exception as e:
         current_app.logger.error(f'Get community error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+@communities_bp.route('/<string:community_id>/join', methods=['POST'])
+@jwt_required()
+def join_community(community_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        community = Community.query.filter_by(public_id=community_id).first()
+        
+        if not user or not community:
+            return jsonify({'error': 'User or community not found'}), 404
+        
+        # Check if already a member
+        existing_membership = CommunityMember.query.filter_by(
+            community_id=community.id,
+            user_id=user.id
+        ).first()
+        
+        if existing_membership:
+            # Leave community
+            db.session.delete(existing_membership)
+            action = 'left'
+            is_member = False
+        else:
+            # Join community
+            membership = CommunityMember(
+                community_id=community.id,
+                user_id=user.id
+            )
+            db.session.add(membership)
+            action = 'joined'
+            is_member = True
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'Successfully {action} {community.name}',
+            'is_member': is_member
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Join community error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
