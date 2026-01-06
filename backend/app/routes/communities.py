@@ -198,3 +198,34 @@ def get_community_members(community_id):
     except Exception as e:
         current_app.logger.error(f'Get community members error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@communities_bp.route('/user/joined', methods=['GET'])
+@jwt_required()
+def get_user_communities():
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        
+        memberships = CommunityMember.query.filter_by(
+            user_id=user.id
+        ).paginate(page=page, per_page=per_page, error_out=False)
+        
+        communities = []
+        for membership in memberships.items:
+            community = Community.query.get(membership.community_id)
+            if community:
+                communities.append(community.to_dict())
+        
+        return jsonify({
+            'communities': communities,
+            'total': memberships.total,
+            'page': memberships.page,
+            'per_page': memberships.per_page,
+            'pages': memberships.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get user communities error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
