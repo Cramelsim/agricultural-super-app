@@ -171,3 +171,20 @@ def delete_message(message_id):
         db.session.rollback()
         current_app.logger.error(f'Delete message error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@messages_bp.route('/unread/count', methods=['GET'])
+@jwt_required()
+def get_unread_count():
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        
+        unread_count = Message.query.filter_by(
+            receiver_id=user.id,
+            is_read=False
+        ).count()
+        
+        return jsonify({'unread_count': unread_count}), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get unread count error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
