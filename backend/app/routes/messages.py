@@ -147,3 +147,27 @@ def send_message():
         db.session.rollback()
         current_app.logger.error(f'Send message error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@messages_bp.route('/<string:message_id>', methods=['DELETE'])
+@jwt_required()
+def delete_message(message_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        message = Message.query.filter_by(public_id=message_id).first()
+        
+        if not message:
+            return jsonify({'error': 'Message not found'}), 404
+        
+        # Only sender can delete their message
+        if message.sender_id != user.id:
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        db.session.delete(message)
+        db.session.commit()
+        
+        return jsonify({'message': 'Message deleted successfully'}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Delete message error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
