@@ -59,3 +59,47 @@ def get_conversations():
     except Exception as e:
         current_app.logger.error(f'Get conversations error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@messages_bp.route('/user/<string:user_id>', methods=['GET'])
+@jwt_required()
+def get_messages(user_id):
+    try:
+        current_user_id = get_jwt_identity()
+        current_user = User.query.filter_by(public_id=current_user_id).first()
+        other_user = User.query.filter_by(public_id=user_id).first()
+        
+        if not current_user or not other_user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 50, type=int)
+        
+        messages = Message.query.filter(
+            ((Message.sender_id == current_user.id) & (Message.receiver_id == other_user.id)) |
+            ((Message.sender_id == other_user.id) & (Message.receiver_id == current_user.id))
+        ).order_by(Message.created_at.desc()).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
+        # Mark messages as read
+        unread_messages = Message.query.filter_by(
+            sender_id=other_user.id,
+            receiver_id=current_user.id,
+            is_read=False
+        ).all()
+        
+        for msg in unread_messages:
+            msg.is_read = True
+        
+        db.session.commit()
+        
+        return jsonify({
+            'messages': [msg.to_dict() for msg in reversed(messages.items)],  # Oldest first
+            'total': messages.total,
+            'page': messages.page,
+            'per_page': messages.per_page,
+            'pages': messages.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get messages error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
