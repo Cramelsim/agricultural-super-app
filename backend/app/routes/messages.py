@@ -103,3 +103,47 @@ def get_messages(user_id):
     except Exception as e:
         current_app.logger.error(f'Get messages error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@messages_bp.route('/send', methods=['POST'])
+@jwt_required()
+def send_message():
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        
+        data = request.get_json()
+        
+        if not data.get('receiver_id'):
+            return jsonify({'error': 'Receiver ID is required'}), 400
+        
+        if not data.get('content'):
+            return jsonify({'error': 'Message content is required'}), 400
+        
+        receiver = User.query.filter_by(public_id=data['receiver_id']).first()
+        
+        if not receiver:
+            return jsonify({'error': 'Receiver not found'}), 404
+        
+        if user.id == receiver.id:
+            return jsonify({'error': 'Cannot send message to yourself'}), 400
+        
+        message = Message(
+            sender_id=user.id,
+            receiver_id=receiver.id,
+            content=data['content']
+        )
+        
+        db.session.add(message)
+        db.session.commit()
+        
+        # Here you would typically send a real-time notification
+        # For now, we'll just return the message
+        
+        return jsonify({
+            'message': 'Message sent successfully',
+            'message_data': message.to_dict()
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f'Send message error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
