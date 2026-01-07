@@ -58,3 +58,27 @@ def save_image(file, upload_folder, max_size=(800, 800)):
     except Exception as e:
         print(f"Error saving image: {e}")
         return None
+def delete_image(filename, upload_folder):
+    """
+    Delete an image file
+    
+    Args:
+        filename: Name of the file to delete
+        upload_folder: Directory where the image is stored
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    if not filename:
+        return False
+    
+    filepath = os.path.join(upload_folder, filename)
+    
+    try:
+        if os.path.exists(filepath):
+            os.remove(filepath)
+            return True
+        return False
+    except Exception as e:
+        print(f"Error deleting image: {e}")
+        return False
