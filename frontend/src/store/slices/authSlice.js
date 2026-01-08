@@ -13,3 +13,17 @@ export const register = createAsyncThunk(
     }
   }
 );
+export const login = createAsyncThunk(
+  'auth/login',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/auth/login', credentials);
+      // Store tokens
+      localStorage.setItem('accessToken', response.data.access_token);
+      localStorage.setItem('refreshToken', response.data.refresh_token);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
