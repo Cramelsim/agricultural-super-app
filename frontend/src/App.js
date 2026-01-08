@@ -17,3 +17,31 @@ import CommunitiesPage from './pages/CommunitiesPage';
 import MessagesPage from './pages/MessagesPage';
 import CreatePostPage from './pages/CreatePostPage';
 import PostDetailPage from './pages/PostDetailPage';
+
+// Theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2E7D32', // Green
+      light: '#4CAF50',
+      dark: '#1B5E20',
+    },
+    secondary: {
+      main: '#FF9800', // Orange
+      light: '#FFB74D',
+      dark: '#F57C00',
+    },
+    background: {
+      default: '#F5F5F5',
+    },
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 700,
+    },
+    h2: {
+      fontWeight: 600,
+    },
+  },
+});
