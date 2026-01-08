@@ -45,3 +45,29 @@ const theme = createTheme({
     },
   },
 });
+function App() {
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+              <Route path="feed" element={<FeedPage />} />
+              <Route path="explore" element={<ExplorePage />} />
+              <Route path="communities" element={<CommunitiesPage />} />
+              <Route path="messages" element={<MessagesPage />} />
+              <Route path="profile/:id" element={<ProfilePage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="create-post" element={<CreatePostPage />} />
+              <Route path="post/:id" element={<PostDetailPage />} />
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </Provider>
+  );
+}
