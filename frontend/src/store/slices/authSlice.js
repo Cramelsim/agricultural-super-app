@@ -27,3 +27,18 @@ export const login = createAsyncThunk(
     }
   }
 );
+
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      await api.post('/auth/logout');
+      // Clear tokens
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      return null;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
