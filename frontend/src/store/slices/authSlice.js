@@ -54,3 +54,11 @@ export const getCurrentUser = createAsyncThunk(
     }
   }
 );
+
+const initialState = {
+  user: null,
+  token: localStorage.getItem('accessToken'),
+  isAuthenticated: false,
+  isLoading: false,
+  error: null,
+};
