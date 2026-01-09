@@ -32,3 +32,12 @@ import {
 import { styled } from '@mui/material/styles';
 import { getPosts, likePost } from '../store/slices/postSlice';
 import { formatDistanceToNow } from 'date-fns';
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  marginBottom: theme.spacing(3),
+  transition: 'transform 0.2s',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: theme.shadows[8],
+  },
+}));
