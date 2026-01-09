@@ -24,25 +24,45 @@ def create_app(config_class=Config):
     # Create upload directory
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
+    # ✅ ADD THE HOME ROUTE HERE
+    @app.route('/')
+    def home():
+        return "Flask is running!"
+    
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.users import users_bp
     from app.routes.posts import posts_bp
     from app.routes.comments import comments_bp
+    from app.routes.messages import messages_bp  # Remove duplicate
     from app.routes.follows import follows_bp
     from app.routes.communities import communities_bp
-    from app.routes.messages import messages_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(users_bp, url_prefix='/api/users')
     app.register_blueprint(posts_bp, url_prefix='/api/posts')
     app.register_blueprint(comments_bp, url_prefix='/api/comments')
+    app.register_blueprint(messages_bp, url_prefix='/api/messages')
     app.register_blueprint(follows_bp, url_prefix='/api/follows')
     app.register_blueprint(communities_bp, url_prefix='/api/communities')
-    app.register_blueprint(messages_bp, url_prefix='/api/messages')
+    # Remove duplicate: app.register_blueprint(messages_bp, url_prefix='/api/messages')
     
     # Create tables
     with app.app_context():
         db.create_all()
+
+        # Create test user if none exist
+        if User.query.count() == 0:
+            from werkzeug.security import generate_password_hash
+            test_user = User(
+                username='admin',
+                email='admin@example.com',
+                password_hash=generate_password_hash('admin123'),
+                full_name='Admin User',
+                user_type='admin'
+            )
+            db.session.add(test_user)
+            db.session.commit()
+            print(f"Created admin user with public_id: {test_user.public_id}")
     
     return app
