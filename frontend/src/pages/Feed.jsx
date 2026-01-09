@@ -54,3 +54,18 @@ const FeedPage = () => {
   useEffect(() => {
     dispatch(getPosts());
   }, [dispatch]);
+
+const handleLike = (postId) => {
+    dispatch(likePost(postId));
+  };
+  
+  const handleMenuOpen = (event, post) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedPost(post);
+  };
+  
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedPost(null);
+  };
+  
