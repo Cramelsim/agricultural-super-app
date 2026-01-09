@@ -37,3 +37,20 @@ const LoginPage = () => {
       navigate('/feed');
     }
   }, [isAuthenticated, navigate]);
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    // Clear field error
+    if (validationErrors[e.target.name]) {
+      setValidationErrors({
+        ...validationErrors,
+        [e.target.name]: null,
+      });
+    }
+    // Clear global error
+    if (error) {
+      dispatch(clearError());
+    }
+  };
