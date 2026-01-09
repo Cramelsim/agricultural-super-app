@@ -41,3 +41,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
     boxShadow: theme.shadows[8],
   },
 }));
+
+const FeedPage = () => {
+  const dispatch = useDispatch();
+  const { posts, isLoading, error } = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.auth);
+  
+  const [filter, setFilter] = useState('all');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
+  
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
