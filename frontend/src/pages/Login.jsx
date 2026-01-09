@@ -30,3 +30,10 @@ const LoginPage = () => {
     email: '',
     password: '',
   });
+  const [validationErrors, setValidationErrors] = useState({});
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/feed');
+    }
+  }, [isAuthenticated, navigate]);
