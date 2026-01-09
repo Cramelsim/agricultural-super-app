@@ -21,3 +21,12 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
 }));
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isAuthenticated, isLoading, error } = useSelector((state) => state.auth);
+  
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
