@@ -68,4 +68,22 @@ const handleLike = (postId) => {
     setAnchorEl(null);
     setSelectedPost(null);
   };
+const handleShare = async () => {
+    if (navigator.share && selectedPost) {
+      try {
+        await navigator.share({
+          title: selectedPost.title,
+          text: selectedPost.content.substring(0, 100),
+          url: `${window.location.origin}/post/${selectedPost.public_id}`,
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    }
+    handleMenuClose();
+  };
   
+  const handleSave = () => {
+    // Implement save functionality
+    handleMenuClose();
+  };
