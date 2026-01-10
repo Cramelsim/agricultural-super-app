@@ -32,3 +32,11 @@ import {
   ExitToApp,
   PostAdd,
 } from '@mui/icons-material';
+
+const Layout = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorElUser, setAnchorElUser] = useState(null);
