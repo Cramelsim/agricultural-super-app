@@ -1,3 +1,4 @@
+# app/__init__.py
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -24,7 +25,7 @@ def create_app(config_class=Config):
     # Create upload directory
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
-    # ✅ ADD THE HOME ROUTE HERE
+    # Add home route
     @app.route('/')
     def home():
         return "Flask is running!"
@@ -34,7 +35,7 @@ def create_app(config_class=Config):
     from app.routes.users import users_bp
     from app.routes.posts import posts_bp
     from app.routes.comments import comments_bp
-    from app.routes.messages import messages_bp  # Remove duplicate
+    from app.routes.messages import messages_bp
     from app.routes.follows import follows_bp
     from app.routes.communities import communities_bp
     
@@ -45,24 +46,31 @@ def create_app(config_class=Config):
     app.register_blueprint(messages_bp, url_prefix='/api/messages')
     app.register_blueprint(follows_bp, url_prefix='/api/follows')
     app.register_blueprint(communities_bp, url_prefix='/api/communities')
-    # Remove duplicate: app.register_blueprint(messages_bp, url_prefix='/api/messages')
     
-    # Create tables
+    # Create tables and add test data
     with app.app_context():
         db.create_all()
-
-        # Create test user if none exist
-        if User.query.count() == 0:
-            from werkzeug.security import generate_password_hash
-            test_user = User(
-                username='admin',
-                email='admin@example.com',
-                password_hash=generate_password_hash('admin123'),
-                full_name='Admin User',
-                user_type='admin'
-            )
-            db.session.add(test_user)
-            db.session.commit()
-            print(f"Created admin user with public_id: {test_user.public_id}")
+        create_test_data(app)
     
     return app
+
+def create_test_data(app):
+    """Create test data if database is empty"""
+    from app.models import User
+    from werkzeug.security import generate_password_hash
+    
+    # Create test user if none exist
+    if User.query.count() == 0:
+        print("Creating test user...")
+        test_user = User(
+            username='testfarmer',
+            email='test@example.com',
+            password_hash=generate_password_hash('password123'),
+            full_name='Test Farmer',
+            user_type='farmer',
+            bio='I am a test farmer',
+            location='Nairobi'
+        )
+        db.session.add(test_user)
+        db.session.commit()
+        print(f"Created test user with public_id: {test_user.public_id}")
