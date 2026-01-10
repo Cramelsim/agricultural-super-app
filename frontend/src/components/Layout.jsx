@@ -50,3 +50,9 @@ const Layout = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+    handleCloseUserMenu();
+  };
+  
