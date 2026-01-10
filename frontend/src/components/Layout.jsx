@@ -56,3 +56,9 @@ const Layout = () => {
     handleCloseUserMenu();
   };
   
+const menuItems = [
+    { text: 'Feed', icon: <Home />, path: '/feed' },
+    { text: 'Explore', icon: <Explore />, path: '/explore' },
+    { text: 'Communities', icon: <Group />, path: '/communities' },
+    { text: 'Messages', icon: <Message />, path: '/messages' },
+  ];
