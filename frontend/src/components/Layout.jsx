@@ -40,3 +40,7 @@ const Layout = () => {
   
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+   const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
