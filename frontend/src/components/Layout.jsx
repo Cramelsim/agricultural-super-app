@@ -44,3 +44,6 @@ const Layout = () => {
    const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
