@@ -13,6 +13,7 @@ export const getPosts = createAsyncThunk(
     }
   }
 );
+
 export const getPost = createAsyncThunk(
   'posts/getPost',
   async (postId, { rejectWithValue }) => {
@@ -73,18 +74,6 @@ export const deletePost = createAsyncThunk(
     try {
       await api.delete(`/posts/${postId}`);
       return postId;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const likePost = createAsyncThunk(
-  'posts/likePost',
-  async (postId, { rejectWithValue }) => {
-    try {
-      const response = await api.post(`/posts/${postId}/like`);
-      return { postId, ...response.data };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
@@ -196,3 +185,6 @@ const postSlice = createSlice({
       });
   },
 });
+
+export const { clearError, clearCurrentPost } = postSlice.actions;
+export default postSlice.reducer;
