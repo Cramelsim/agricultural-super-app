@@ -13,3 +13,14 @@ export const getPosts = createAsyncThunk(
     }
   }
 );
+export const getPost = createAsyncThunk(
+  'posts/getPost',
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/posts/${postId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
