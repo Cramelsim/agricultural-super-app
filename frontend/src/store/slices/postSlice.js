@@ -24,3 +24,33 @@ export const getPost = createAsyncThunk(
     }
   }
 );
+
+export const createPost = createAsyncThunk(
+  'posts/createPost',
+  async (postData, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      
+      // Append text fields
+      Object.keys(postData).forEach(key => {
+        if (key === 'images') {
+          // Handle multiple images
+          postData.images.forEach((image, index) => {
+            formData.append('images', image);
+          });
+        } else {
+          formData.append(key, postData[key]);
+        }
+      });
+      
+      const response = await api.post('/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
