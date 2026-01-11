@@ -90,3 +90,25 @@ export const likePost = createAsyncThunk(
     }
   }
 );
+
+export const likePost = createAsyncThunk(
+  'posts/likePost',
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/posts/${postId}/like`);
+      return { postId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+const initialState = {
+  posts: [],
+  currentPost: null,
+  isLoading: false,
+  error: null,
+  total: 0,
+  page: 1,
+  perPage: 20,
+};
