@@ -78,3 +78,15 @@ export const deletePost = createAsyncThunk(
     }
   }
 );
+
+export const likePost = createAsyncThunk(
+  'posts/likePost',
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/posts/${postId}/like`);
+      return { postId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
