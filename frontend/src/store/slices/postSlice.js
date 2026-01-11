@@ -54,3 +54,15 @@ export const createPost = createAsyncThunk(
     }
   }
 );
+
+export const updatePost = createAsyncThunk(
+  'posts/updatePost',
+  async ({ postId, postData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/posts/${postId}`, postData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
