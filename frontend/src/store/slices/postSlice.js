@@ -66,3 +66,15 @@ export const updatePost = createAsyncThunk(
     }
   }
 );
+
+export const deletePost = createAsyncThunk(
+  'posts/deletePost',
+  async (postId, { rejectWithValue }) => {
+    try {
+      await api.delete(`/posts/${postId}`);
+      return postId;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
