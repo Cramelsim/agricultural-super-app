@@ -37,7 +37,6 @@ export const updateComment = createAsyncThunk(
   }
 );
 
-
 export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
   async (commentId, { rejectWithValue }) => {
@@ -57,3 +56,52 @@ const initialState = {
   total: 0,
   page: 1,
 };
+
+const commentSlice = createSlice({
+  name: 'comments',
+  initialState,
+  reducers: {
+    clearComments: (state) => {
+      state.comments = [];
+      state.total = 0;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getComments.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getComments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.comments = action.payload.comments;
+        state.total = action.payload.total;
+        state.page = action.payload.page;
+      })
+      .addCase(getComments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.error || 'Failed to load comments';
+      })
+      
+      .addCase(createComment.fulfilled, (state, action) => {
+        state.comments.push(action.payload.comment);
+        state.total += 1;
+      })
+      
+      .addCase(updateComment.fulfilled, (state, action) => {
+        const index = state.comments.findIndex(c => c.public_id === action.payload.comment.public_id);
+        if (index !== -1) {
+          state.comments[index] = action.payload.comment;
+        }
+      })
+      
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        state.comments = state.comments.filter(c => c.public_id !== action.payload);
+        state.total = Math.max(0, state.total - 1);
+      });
+  },
+});
+
