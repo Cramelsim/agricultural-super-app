@@ -50,3 +50,10 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+const initialState = {
+  comments: [],
+  isLoading: false,
+  error: null,
+  total: 0,
+  page: 1,
+};
