@@ -37,17 +37,6 @@ export const updateComment = createAsyncThunk(
   }
 );
 
-export const updateComment = createAsyncThunk(
-  'comments/updateComment',
-  async ({ commentId, content }, { rejectWithValue }) => {
-    try {
-      const response = await api.put(`/comments/${commentId}`, { content });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
 
 export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
@@ -60,3 +49,4 @@ export const deleteComment = createAsyncThunk(
     }
   }
 );
+
