@@ -12,3 +12,15 @@ export const getComments = createAsyncThunk(
     }
   }
 );
+
+export const createComment = createAsyncThunk(
+  'comments/createComment',
+  async ({ postId, content }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/comments/post/${postId}`, { content });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
