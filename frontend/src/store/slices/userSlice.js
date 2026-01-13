@@ -107,3 +107,62 @@ const initialState = {
   isLoading: false,
   error: null,
 };
+
+const userSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {
+    clearUser: (state) => {
+      state.currentUser = null;
+    },
+    clearSearchResults: (state) => {
+      state.searchResults = [];
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.currentUser = action.payload.user;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.error || 'Failed to load user';
+      })
+      
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.currentUser = action.payload.user;
+      })
+      
+      .addCase(searchUsers.fulfilled, (state, action) => {
+        state.searchResults = action.payload.users;
+      })
+      
+      .addCase(followUser.fulfilled, (state, action) => {
+        const { userId, is_following } = action.payload;
+        if (state.currentUser && state.currentUser.public_id === userId) {
+          // Update follower count for current user
+          state.currentUser.follower_count += is_following ? 1 : -1;
+        }
+      })
+      
+      .addCase(checkFollow.fulfilled, (state, action) => {
+        // Store follow status for current user if needed
+      })
+      
+      .addCase(getFollowing.fulfilled, (state, action) => {
+        state.following = action.payload.following;
+      })
+      
+      .addCase(getFollowers.fulfilled, (state, action) => {
+        state.followers = action.payload.followers;
+      });
+  },
+});
