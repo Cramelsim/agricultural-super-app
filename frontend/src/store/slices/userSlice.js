@@ -62,3 +62,15 @@ export const followUser = createAsyncThunk(
     }
   }
 );
+
+export const checkFollow = createAsyncThunk(
+  'users/checkFollow',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/follows/check/${userId}`);
+      return { userId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
