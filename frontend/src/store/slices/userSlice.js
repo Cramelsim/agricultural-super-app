@@ -166,3 +166,6 @@ const userSlice = createSlice({
       });
   },
 });
+
+export const { clearUser, clearSearchResults, clearError } = userSlice.actions;
+export default userSlice.reducer;
