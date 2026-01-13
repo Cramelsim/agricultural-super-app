@@ -98,3 +98,12 @@ export const getFollowers = createAsyncThunk(
     }
   }
 );
+
+const initialState = {
+  currentUser: null,
+  searchResults: [],
+  following: [],
+  followers: [],
+  isLoading: false,
+  error: null,
+};
