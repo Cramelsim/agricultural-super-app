@@ -38,3 +38,15 @@ export const updateProfile = createAsyncThunk(
     }
   }
 );
+
+export const searchUsers = createAsyncThunk(
+  'users/searchUsers',
+  async (searchParams, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/users/search', { params: searchParams });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
