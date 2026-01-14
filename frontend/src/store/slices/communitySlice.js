@@ -97,3 +97,18 @@ const initialState = {
   total: 0,
   page: 1,
 };
+const communitySlice = createSlice({
+  name: 'communities',
+  initialState,
+  reducers: {
+    clearCommunities: (state) => {
+      state.communities = [];
+      state.total = 0;
+    },
+    clearCurrentCommunity: (state) => {
+      state.currentCommunity = null;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
