@@ -12,3 +12,15 @@ export const getCommunities = createAsyncThunk(
     }
   }
 );
+
+export const getCommunity = createAsyncThunk(
+  'communities/getCommunity',
+  async (communityId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/communities/${communityId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
