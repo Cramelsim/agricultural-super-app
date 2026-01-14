@@ -149,3 +149,6 @@ const communitySlice = createSlice({
           state.currentCommunity.member_count += is_member ? 1 : -1;
         }
       })
+      .addCase(getUserCommunities.fulfilled, (state, action) => {
+        state.userCommunities = action.payload.communities;
+      })
