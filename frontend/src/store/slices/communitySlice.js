@@ -87,3 +87,13 @@ export const getCommunityMembers = createAsyncThunk(
   }
 );
 
+const initialState = {
+  communities: [],
+  currentCommunity: null,
+  userCommunities: [],
+  communityMembers: [],
+  isLoading: false,
+  error: null,
+  total: 0,
+  page: 1,
+};
