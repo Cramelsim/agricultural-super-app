@@ -132,3 +132,7 @@ const communitySlice = createSlice({
       .addCase(getCommunity.fulfilled, (state, action) => {
         state.currentCommunity = action.payload.community;
       })
+      .addCase(createCommunity.fulfilled, (state, action) => {
+        state.communities.unshift(action.payload.community);
+      })
+      
