@@ -112,3 +112,9 @@ const communitySlice = createSlice({
       state.error = null;
     },
   },
+   extraReducers: (builder) => {
+    builder
+      .addCase(getCommunities.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
