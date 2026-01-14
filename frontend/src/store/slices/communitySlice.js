@@ -24,3 +24,29 @@ export const getCommunity = createAsyncThunk(
     }
   }
 );
+
+export const createCommunity = createAsyncThunk(
+  'communities/createCommunity',
+  async (communityData, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      
+      Object.keys(communityData).forEach(key => {
+        if (key === 'image' && communityData[key]) {
+          formData.append('image', communityData[key]);
+        } else {
+          formData.append(key, communityData[key]);
+        }
+      });
+      
+      const response = await api.post('/communities', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
