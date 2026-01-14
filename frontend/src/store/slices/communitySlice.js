@@ -152,3 +152,9 @@ const communitySlice = createSlice({
       .addCase(getUserCommunities.fulfilled, (state, action) => {
         state.userCommunities = action.payload.communities;
       })
+
+      .addCase(getCommunityMembers.fulfilled, (state, action) => {
+        // Store members for current community
+      });
+  },
+});
