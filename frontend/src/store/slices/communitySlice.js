@@ -124,3 +124,11 @@ const communitySlice = createSlice({
         state.total = action.payload.total;
         state.page = action.payload.page;
       })
+      .addCase(getCommunities.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.error || 'Failed to load communities';
+      })
+      
+      .addCase(getCommunity.fulfilled, (state, action) => {
+        state.currentCommunity = action.payload.community;
+      })
