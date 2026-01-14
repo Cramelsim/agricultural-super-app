@@ -118,3 +118,9 @@ const communitySlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
+      addCase(getCommunities.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.communities = action.payload.communities;
+        state.total = action.payload.total;
+        state.page = action.payload.page;
+      })
