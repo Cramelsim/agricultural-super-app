@@ -135,4 +135,17 @@ const communitySlice = createSlice({
       .addCase(createCommunity.fulfilled, (state, action) => {
         state.communities.unshift(action.payload.community);
       })
-      
+       .addCase(joinCommunity.fulfilled, (state, action) => {
+        const { communityId, is_member } = action.payload;
+        const index = state.communities.findIndex(c => c.public_id === communityId);
+        
+        if (index !== -1) {
+          state.communities[index].is_member = is_member;
+          state.communities[index].member_count += is_member ? 1 : -1;
+        }
+        
+        if (state.currentCommunity && state.currentCommunity.public_id === communityId) {
+          state.currentCommunity.is_member = is_member;
+          state.currentCommunity.member_count += is_member ? 1 : -1;
+        }
+      })
