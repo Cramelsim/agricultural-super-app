@@ -50,3 +50,15 @@ export const createCommunity = createAsyncThunk(
     }
   }
 );
+
+export const joinCommunity = createAsyncThunk(
+  'communities/joinCommunity',
+  async (communityId, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/communities/${communityId}/join`);
+      return { communityId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
