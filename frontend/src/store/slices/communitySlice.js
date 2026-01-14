@@ -62,3 +62,15 @@ export const joinCommunity = createAsyncThunk(
     }
   }
 );
+
+export const getUserCommunities = createAsyncThunk(
+  'communities/getUserCommunities',
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/communities/user/joined', { params });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
