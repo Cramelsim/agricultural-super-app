@@ -97,6 +97,7 @@ const initialState = {
   total: 0,
   page: 1,
 };
+
 const communitySlice = createSlice({
   name: 'communities',
   initialState,
@@ -112,13 +113,13 @@ const communitySlice = createSlice({
       state.error = null;
     },
   },
-   extraReducers: (builder) => {
+  extraReducers: (builder) => {
     builder
       .addCase(getCommunities.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      addCase(getCommunities.fulfilled, (state, action) => {
+      .addCase(getCommunities.fulfilled, (state, action) => {
         state.isLoading = false;
         state.communities = action.payload.communities;
         state.total = action.payload.total;
@@ -132,10 +133,12 @@ const communitySlice = createSlice({
       .addCase(getCommunity.fulfilled, (state, action) => {
         state.currentCommunity = action.payload.community;
       })
+      
       .addCase(createCommunity.fulfilled, (state, action) => {
         state.communities.unshift(action.payload.community);
       })
-       .addCase(joinCommunity.fulfilled, (state, action) => {
+      
+      .addCase(joinCommunity.fulfilled, (state, action) => {
         const { communityId, is_member } = action.payload;
         const index = state.communities.findIndex(c => c.public_id === communityId);
         
@@ -149,12 +152,16 @@ const communitySlice = createSlice({
           state.currentCommunity.member_count += is_member ? 1 : -1;
         }
       })
+      
       .addCase(getUserCommunities.fulfilled, (state, action) => {
         state.userCommunities = action.payload.communities;
       })
-
+      
       .addCase(getCommunityMembers.fulfilled, (state, action) => {
         // Store members for current community
       });
   },
 });
+
+export const { clearCommunities, clearCurrentCommunity, clearError } = communitySlice.actions;
+export default communitySlice.reducer;
