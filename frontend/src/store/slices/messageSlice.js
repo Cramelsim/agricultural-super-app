@@ -24,3 +24,15 @@ export const getMessages = createAsyncThunk(
     }
   }
 );
+
+export const sendMessage = createAsyncThunk(
+  'messages/sendMessage',
+  async ({ receiverId, content }, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/messages/send', { receiver_id: receiverId, content });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
