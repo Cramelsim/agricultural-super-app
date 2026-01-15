@@ -48,3 +48,15 @@ export const getUnreadCount = createAsyncThunk(
     }
   }
 );
+
+export const deleteMessage = createAsyncThunk(
+  'messages/deleteMessage',
+  async (messageId, { rejectWithValue }) => {
+    try {
+      await api.delete(`/messages/${messageId}`);
+      return messageId;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
