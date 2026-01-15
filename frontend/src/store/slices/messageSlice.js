@@ -90,3 +90,8 @@ const messageSlice = createSlice({
       state.error = null;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getConversations.fulfilled, (state, action) => {
+        state.conversations = action.payload.conversations;
+      })
