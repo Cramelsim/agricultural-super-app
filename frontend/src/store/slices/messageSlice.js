@@ -60,3 +60,14 @@ export const deleteMessage = createAsyncThunk(
     }
   }
 );
+
+const initialState = {
+  conversations: [],
+  currentConversation: null,
+  messages: [],
+  unreadCount: 0,
+  isLoading: false,
+  error: null,
+  total: 0,
+  page: 1,
+};
