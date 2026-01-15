@@ -95,3 +95,9 @@ const messageSlice = createSlice({
       .addCase(getConversations.fulfilled, (state, action) => {
         state.conversations = action.payload.conversations;
       })
+       .addCase(getMessages.fulfilled, (state, action) => {
+        state.currentConversation = action.payload.userId;
+        state.messages = action.payload.messages;
+        state.total = action.payload.total;
+        state.page = action.payload.page;
+      })
