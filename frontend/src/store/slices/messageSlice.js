@@ -12,3 +12,15 @@ export const getConversations = createAsyncThunk(
     }
   }
 );
+
+export const getMessages = createAsyncThunk(
+  'messages/getMessages',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/messages/user/${userId}`);
+      return { userId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
