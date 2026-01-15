@@ -71,3 +71,22 @@ const initialState = {
   total: 0,
   page: 1,
 };
+
+const messageSlice = createSlice({
+  name: 'messages',
+  initialState,
+  reducers: {
+    clearConversations: (state) => {
+      state.conversations = [];
+    },
+    clearCurrentConversation: (state) => {
+      state.currentConversation = null;
+      state.messages = [];
+    },
+    addMessage: (state, action) => {
+      state.messages.push(action.payload);
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
