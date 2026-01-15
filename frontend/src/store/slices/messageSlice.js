@@ -36,3 +36,15 @@ export const sendMessage = createAsyncThunk(
     }
   }
 );
+
+export const getUnreadCount = createAsyncThunk(
+  'messages/getUnreadCount',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/messages/unread/count');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
