@@ -104,3 +104,7 @@ const messageSlice = createSlice({
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.messages.push(action.payload.message_data);
       })
+
+      .addCase(getUnreadCount.fulfilled, (state, action) => {
+        state.unreadCount = action.payload.unread_count;
+      })
