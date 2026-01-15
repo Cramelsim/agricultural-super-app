@@ -108,3 +108,9 @@ const messageSlice = createSlice({
       .addCase(getUnreadCount.fulfilled, (state, action) => {
         state.unreadCount = action.payload.unread_count;
       })
+
+      .addCase(deleteMessage.fulfilled, (state, action) => {
+        state.messages = state.messages.filter(m => m.public_id !== action.payload);
+      });
+  },
+});
