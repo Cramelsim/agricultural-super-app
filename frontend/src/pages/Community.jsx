@@ -182,3 +182,69 @@ const handleCreateCommunity = () => {
               </Grid>
             </>
           )}
+          {/* All Communities */}
+          <Typography variant="h6" gutterBottom>
+            All Communities
+          </Typography>
+          {communities.length === 0 ? (
+            <Alert severity="info">
+              No communities found. Be the first to create one!
+            </Alert>
+          ) : (
+            <Grid container spacing={3}>
+              {communities.map((community) => (
+                <Grid item xs={12} sm={6} md={4} key={community.public_id}>
+                  <StyledCard>
+                    <CardMedia
+                      component="img"
+                      height="160"
+                      image={community.image_url || '/default-community.jpg'}
+                      alt={community.name}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h6" component="div">
+                        {community.name}
+                        {community.is_public ? (
+                          <Public fontSize="small" sx={{ ml: 1, color: 'success.main' }} />
+                        ) : (
+                          <Lock fontSize="small" sx={{ ml: 1, color: 'warning.main' }} />
+                        )}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" paragraph>
+                        {community.description?.substring(0, 150)}...
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Chip
+                          icon={<Group />}
+                          label={`${community.member_count} members`}
+                          size="small"
+                        />
+                        <Typography variant="caption" color="text.secondary">
+                          By {community.admin?.username}
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        component={Link}
+                        to={`/communities/${community.public_id}`}
+                      >
+                        View Details
+                      </Button>
+                      <Button
+                        size="small"
+                        color={community.is_member ? "secondary" : "primary"}
+                        onClick={() => handleJoinCommunity(community.public_id)}
+                        sx={{ ml: 'auto' }}
+                      >
+                        {community.is_member ? 'Leave' : 'Join'}
+                      </Button>
+                    </CardActions>
+                  </StyledCard>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </>
+      )}
