@@ -123,3 +123,62 @@ const handleCreateCommunity = () => {
         </Box>
       ) : (
         <></>
+         {/* User's Communities */}
+          {userCommunities.length > 0 && (
+            <>
+              <Typography variant="h6" gutterBottom>
+                Your Communities
+              </Typography>
+              <Grid container spacing={3} sx={{ mb: 4 }}>
+                {userCommunities.slice(0, 4).map((community) => (
+                  <Grid item xs={12} sm={6} md={3} key={community.public_id}>
+                    <StyledCard>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={community.image_url || '/default-community.jpg'}
+                        alt={community.name}
+                      />
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography gutterBottom variant="h6" component="div">
+                          {community.name}
+                          {community.is_public ? (
+                            <Public fontSize="small" sx={{ ml: 1 }} />
+                          ) : (
+                            <Lock fontSize="small" sx={{ ml: 1 }} />
+                          )}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {community.description?.substring(0, 100)}...
+                        </Typography>
+                        <Box sx={{ mt: 2 }}>
+                          <Chip
+                            icon={<Group />}
+                            label={`${community.member_count} members`}
+                            size="small"
+                          />
+                        </Box>
+                      </CardContent>
+                      <CardActions>
+                        <Button
+                          size="small"
+                          component={Link}
+                          to={`/communities/${community.public_id}`}
+                          fullWidth
+                        >
+                          View
+                        </Button>
+                        <Button
+                          size="small"
+                          color="secondary"
+                          onClick={() => handleJoinCommunity(community.public_id)}
+                        >
+                          Leave
+                        </Button>
+                      </CardActions>
+                    </StyledCard>
+                  </Grid>
+                ))}
+              </Grid>
+            </>
+          )}
