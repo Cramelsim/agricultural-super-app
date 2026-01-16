@@ -64,3 +64,14 @@ const CommunitiesPage = () => {
     dispatch(joinCommunity(communityId));
   };
   
+const handleCreateCommunity = () => {
+    dispatch(createCommunity(newCommunity)).then(() => {
+      setOpenCreateDialog(false);
+      setNewCommunity({
+        name: '',
+        description: '',
+        is_public: true,
+        image: null,
+      });
+    });
+  };
