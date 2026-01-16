@@ -113,3 +113,13 @@ const handleCreateCommunity = () => {
           }}
         />
       </Box>
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>
+      )}
+      
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" py={4}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <></>
