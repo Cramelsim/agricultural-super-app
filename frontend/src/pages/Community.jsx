@@ -75,3 +75,12 @@ const handleCreateCommunity = () => {
       });
     });
   };
+
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setNewCommunity({
+        ...newCommunity,
+        image: e.target.files[0],
+      });
+    }
+  };
