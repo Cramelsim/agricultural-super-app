@@ -40,3 +40,17 @@ const StyledCard = styled(Card)(({ theme }) => ({
     transform: 'translateY(-4px)',
   },
 }));
+const CommunitiesPage = () => {
+  const dispatch = useDispatch();
+  const { communities, userCommunities, isLoading, error } = useSelector((state) => state.communities);
+  const { user } = useSelector((state) => state.auth);
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [newCommunity, setNewCommunity] = useState({
+    name: '',
+    description: '',
+    is_public: true,
+    image: null,
+  });
+  
