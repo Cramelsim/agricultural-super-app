@@ -53,4 +53,6 @@ const CommunitiesPage = () => {
     is_public: true,
     image: null,
   });
-  
+  useEffect(() => {
+    dispatch(getCommunities());
+  }, [
