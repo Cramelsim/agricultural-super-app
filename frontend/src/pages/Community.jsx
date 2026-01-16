@@ -55,4 +55,8 @@ const CommunitiesPage = () => {
   });
   useEffect(() => {
     dispatch(getCommunities());
-  }, [
+  }, [dispatch]);
+  
+  const handleSearch = () => {
+    dispatch(getCommunities({ search: searchTerm }));
+  };
