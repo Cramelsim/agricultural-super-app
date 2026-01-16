@@ -84,3 +84,17 @@ const handleCreateCommunity = () => {
       });
     }
   };
+ return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+        <Typography variant="h4" component="h1">
+          Agricultural Communities
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => setOpenCreateDialog(true)}
+        >
+          Create Community
+        </Button>
+      </Box>
