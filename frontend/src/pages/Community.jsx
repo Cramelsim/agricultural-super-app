@@ -21,3 +21,22 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
+import {
+  Search,
+  Add,
+  Group,
+  Public,
+  Lock,
+} from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import { getCommunities, joinCommunity, createCommunity } from '../store/slices/communitySlice';
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'transform 0.2s',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+  },
+}));
