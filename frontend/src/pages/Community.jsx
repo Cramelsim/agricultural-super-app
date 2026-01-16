@@ -40,6 +40,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     transform: 'translateY(-4px)',
   },
 }));
+
 const CommunitiesPage = () => {
   const dispatch = useDispatch();
   const { communities, userCommunities, isLoading, error } = useSelector((state) => state.communities);
@@ -53,6 +54,7 @@ const CommunitiesPage = () => {
     is_public: true,
     image: null,
   });
+  
   useEffect(() => {
     dispatch(getCommunities());
   }, [dispatch]);
@@ -60,11 +62,12 @@ const CommunitiesPage = () => {
   const handleSearch = () => {
     dispatch(getCommunities({ search: searchTerm }));
   };
+  
   const handleJoinCommunity = (communityId) => {
     dispatch(joinCommunity(communityId));
   };
   
-const handleCreateCommunity = () => {
+  const handleCreateCommunity = () => {
     dispatch(createCommunity(newCommunity)).then(() => {
       setOpenCreateDialog(false);
       setNewCommunity({
@@ -75,7 +78,7 @@ const handleCreateCommunity = () => {
       });
     });
   };
-
+  
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setNewCommunity({
@@ -84,7 +87,8 @@ const handleCreateCommunity = () => {
       });
     }
   };
- return (
+  
+  return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
         <Typography variant="h4" component="h1">
@@ -98,8 +102,8 @@ const handleCreateCommunity = () => {
           Create Community
         </Button>
       </Box>
-
-       {/* Search Bar */}
+      
+      {/* Search Bar */}
       <Box sx={{ mb: 4 }}>
         <TextField
           fullWidth
@@ -113,6 +117,7 @@ const handleCreateCommunity = () => {
           }}
         />
       </Box>
+      
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>
       )}
@@ -122,8 +127,8 @@ const handleCreateCommunity = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <></>
-         {/* User's Communities */}
+        <>
+          {/* User's Communities */}
           {userCommunities.length > 0 && (
             <>
               <Typography variant="h6" gutterBottom>
@@ -182,6 +187,7 @@ const handleCreateCommunity = () => {
               </Grid>
             </>
           )}
+          
           {/* All Communities */}
           <Typography variant="h6" gutterBottom>
             All Communities
@@ -248,3 +254,73 @@ const handleCreateCommunity = () => {
           )}
         </>
       )}
+      
+      {/* Create Community Dialog */}
+      <Dialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Create New Community</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Community Name"
+            fullWidth
+            value={newCommunity.name}
+            onChange={(e) => setNewCommunity({ ...newCommunity, name: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            value={newCommunity.description}
+            onChange={(e) => setNewCommunity({ ...newCommunity, description: e.target.value })}
+          />
+          <Box sx={{ mt: 2 }}>
+            <input
+              accept="image/*"
+              style={{ display: 'none' }}
+              id="community-image-upload"
+              type="file"
+              onChange={handleImageChange}
+            />
+            <label htmlFor="community-image-upload">
+              <Button variant="outlined" component="span">
+                Upload Image
+              </Button>
+            </label>
+            {newCommunity.image && (
+              <Typography variant="caption" sx={{ ml: 2 }}>
+                {newCommunity.image.name}
+              </Typography>
+            )}
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2">Privacy:</Typography>
+            <Button
+              variant={newCommunity.is_public ? "contained" : "outlined"}
+              onClick={() => setNewCommunity({ ...newCommunity, is_public: true })}
+              sx={{ mr: 1 }}
+            >
+              <Public sx={{ mr: 1 }} /> Public
+            </Button>
+            <Button
+              variant={!newCommunity.is_public ? "contained" : "outlined"}
+              onClick={() => setNewCommunity({ ...newCommunity, is_public: false })}
+            >
+              <Lock sx={{ mr: 1 }} /> Private
+            </Button>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
+          <Button onClick={handleCreateCommunity} variant="contained">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
+  );
+};
+
+export default CommunitiesPage;
