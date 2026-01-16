@@ -60,3 +60,7 @@ const CommunitiesPage = () => {
   const handleSearch = () => {
     dispatch(getCommunities({ search: searchTerm }));
   };
+  const handleJoinCommunity = (communityId) => {
+    dispatch(joinCommunity(communityId));
+  };
+  
