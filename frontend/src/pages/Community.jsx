@@ -313,7 +313,7 @@ const CommunitiesPage = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button>
+          {/* <Button onClick={() => setOpenCreateDialog(false)}>Cancel</Button> */}
           <Button onClick={handleCreateCommunity} variant="contained">
             Create
           </Button>
