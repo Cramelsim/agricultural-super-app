@@ -9,7 +9,7 @@ import store from './store/store';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import RegisterPage from './pages/RegisterPage';
+import Register from './pages/Register';
 import ProfilePage from './pages/ProfilePage';
 import FeedPage from './pages/FeedPage';
 import ExplorePage from './pages/ExplorePage';
@@ -55,7 +55,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="login" element={<Login/>} />
-              <Route path="register" element={<RegisterPage />} />
+              <Route path="register" element={<Register />} />
               <Route path="feed" element={<FeedPage />} />
               <Route path="explore" element={<ExplorePage />} />
               <Route path="communities" element={<CommunitiesPage />} />
