@@ -13,7 +13,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Feed from './pages/Feed';
 import Explore from './pages/Explore';
-import CommunitiesPage from './pages/CommunitiesPage';
+import Communities from './pages/Communities';
 import MessagesPage from './pages/MessagesPage';
 import CreatePostPage from './pages/CreatePostPage';
 import PostDetailPage from './pages/PostDetailPage';
@@ -58,7 +58,7 @@ function App() {
               <Route path="register" element={<Register />} />
               <Route path="feed" element={<Feed />} />
               <Route path="explore" element={<Explore />} />
-              <Route path="communities" element={<CommunitiesPage />} />
+              <Route path="communities" element={<Communities />} />
               <Route path="messages" element={<MessagesPage />} />
               <Route path="profile/:id" element={<Profile />} />
               <Route path="profile" element={<Profile />} />
