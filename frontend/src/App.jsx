@@ -11,8 +11,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import FeedPage from './pages/Feed';
-import ExplorePage from './pages/ExplorePage';
+import Feed from './pages/Feed';
+import Explore from './pages/Explore';
 import CommunitiesPage from './pages/CommunitiesPage';
 import MessagesPage from './pages/MessagesPage';
 import CreatePostPage from './pages/CreatePostPage';
@@ -57,7 +57,7 @@ function App() {
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register />} />
               <Route path="feed" element={<Feed />} />
-              <Route path="explore" element={<ExplorePage />} />
+              <Route path="explore" element={<Explore />} />
               <Route path="communities" element={<CommunitiesPage />} />
               <Route path="messages" element={<MessagesPage />} />
               <Route path="profile/:id" element={<Profile />} />
