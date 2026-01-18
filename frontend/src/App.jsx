@@ -11,7 +11,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import FeedPage from './pages/FeedPage';
+import FeedPage from './pages/Feed';
 import ExplorePage from './pages/ExplorePage';
 import CommunitiesPage from './pages/CommunitiesPage';
 import MessagesPage from './pages/MessagesPage';
@@ -56,7 +56,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register />} />
-              <Route path="feed" element={<FeedPage />} />
+              <Route path="feed" element={<Feed />} />
               <Route path="explore" element={<ExplorePage />} />
               <Route path="communities" element={<CommunitiesPage />} />
               <Route path="messages" element={<MessagesPage />} />
