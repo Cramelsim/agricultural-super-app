@@ -14,7 +14,7 @@ import Profile from './pages/Profile';
 import Feed from './pages/Feed';
 import Explore from './pages/Explore';
 import Community from './pages/Community';
-import MessagesPage from './pages/MessagesPage';
+import Messages from './pages/Messages';
 import CreatePostPage from './pages/CreatePostPage';
 import PostDetailPage from './pages/PostDetailPage';
 
@@ -59,7 +59,7 @@ function App() {
               <Route path="feed" element={<Feed />} />
               <Route path="explore" element={<Explore />} />
               <Route path="community" element={<Community />} />
-              <Route path="messages" element={<MessagesPage />} />
+              <Route path="messages" element={<Messages/>} />
               <Route path="profile/:id" element={<Profile />} />
               <Route path="profile" element={<Profile />} />
               <Route path="create-post" element={<CreatePostPage />} />
