@@ -10,7 +10,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ProfilePage from './pages/ProfilePage';
+import Profile from './pages/Profile;
 import FeedPage from './pages/FeedPage';
 import ExplorePage from './pages/ExplorePage';
 import CommunitiesPage from './pages/CommunitiesPage';
@@ -60,8 +60,8 @@ function App() {
               <Route path="explore" element={<ExplorePage />} />
               <Route path="communities" element={<CommunitiesPage />} />
               <Route path="messages" element={<MessagesPage />} />
-              <Route path="profile/:id" element={<ProfilePage />} />
-              <Route path="profile" element={<ProfilePage />} />
+              <Route path="profile/:id" element={<Profile />} />
+              <Route path="profile" element={<Profile />} />
               <Route path="create-post" element={<CreatePostPage />} />
               <Route path="post/:id" element={<PostDetailPage />} />
             </Route>
