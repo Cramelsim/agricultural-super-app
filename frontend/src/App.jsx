@@ -16,7 +16,7 @@ import Explore from './pages/Explore';
 import Community from './pages/Community';
 import Messages from './pages/Messages';
 import CreatePost from './pages/CreatePost';
-import PostDetailPage from './pages/PostDetailPage';
+import PostDetail from './pages/PostDetail';
 
 // Theme
 const theme = createTheme({
