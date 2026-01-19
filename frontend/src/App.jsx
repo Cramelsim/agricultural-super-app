@@ -15,7 +15,7 @@ import Feed from './pages/Feed';
 import Explore from './pages/Explore';
 import Community from './pages/Community';
 import Messages from './pages/Messages';
-import CreatePostPage from './pages/CreatePostPage';
+import CreatePost from './pages/CreatePost';
 import PostDetailPage from './pages/PostDetailPage';
 
 // Theme
