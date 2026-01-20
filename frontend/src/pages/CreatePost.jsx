@@ -38,3 +38,7 @@ const handleSubmit = (e) => {
       setTagInput('');
     }
   };
+
+  const handleRemoveTag = (tagToRemove) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
+  };
