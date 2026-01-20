@@ -24,3 +24,10 @@ const CreatePostPage = () => {
   const [category, setCategory] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+
+const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ title, content, category, tags });
+    // Here you would dispatch an action to create the post
+    navigate('/feed');
+  };
