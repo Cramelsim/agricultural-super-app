@@ -31,3 +31,10 @@ const handleSubmit = (e) => {
     // Here you would dispatch an action to create the post
     navigate('/feed');
   };
+
+ const handleAddTag = () => {
+    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput('');
+    }
+  };
