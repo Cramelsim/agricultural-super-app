@@ -37,3 +37,23 @@ const communities = [
     { id: 3, name: 'Smart Irrigation', members: 1800, description: 'Modern irrigation techniques' },
     { id: 4, name: 'Young Farmers', members: 4100, description: 'Next generation of farmers' },
   ];
+   return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Explore
+      </Typography>
+      
+      <TextField
+        fullWidth
+        placeholder="Search experts, communities, posts..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 4 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search />
+            </InputAdornment>
+          ),
+        }}
+      />
