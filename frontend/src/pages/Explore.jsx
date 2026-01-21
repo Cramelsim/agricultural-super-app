@@ -74,3 +74,64 @@ const communities = [
           ))}
         </Box>
       </Box>
+       <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h5" gutterBottom>
+            Top Experts
+          </Typography>
+          {experts.map((expert) => (
+            <Card key={expert.id} sx={{ mb: 2 }}>
+              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar sx={{ width: 60, height: 60, mr: 2 }}>
+                  {expert.name.charAt(0)}
+                </Avatar>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6">{expert.name}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {expert.role}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                    <LocationOn fontSize="small" />
+                    <Typography variant="body2" sx={{ ml: 0.5 }}>
+                      {expert.location}
+                    </Typography>
+                    <Typography variant="body2" sx={{ ml: 2 }}>
+                      {expert.followers.toLocaleString()} followers
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button variant="outlined" size="small">
+                  Follow
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </Grid>
+        
+        <Grid item xs={12} md={6}>
+          <Typography variant="h5" gutterBottom>
+            Popular Communities
+          </Typography>
+          {communities.map((community) => (
+            <Card key={community.id} sx={{ mb: 2 }}>
+              <CardContent>
+                <Typography variant="h6">{community.name}</Typography>
+                <Typography variant="body2" color="textSecondary" paragraph>
+                  {community.description}
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="body2">
+                    {community.members.toLocaleString()} members
+                  </Typography>
+                  <Button variant="contained" size="small" component={Link} to={`/communities/${community.id}`}>
+                    Join
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
