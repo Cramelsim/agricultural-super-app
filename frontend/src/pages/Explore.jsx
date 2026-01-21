@@ -16,3 +16,7 @@ import {
 } from '@mui/material';
 import { Search, LocationOn, Star, StarBorder } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+
+const ExplorePage = () => {
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
