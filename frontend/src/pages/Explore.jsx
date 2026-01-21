@@ -57,3 +57,20 @@ const communities = [
           ),
         }}
       />
+
+<Box sx={{ mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Categories
+        </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          {categories.map((cat) => (
+            <Chip
+              key={cat}
+              label={cat}
+              color={selectedCategory === cat.toLowerCase() ? 'primary' : 'default'}
+              onClick={() => setSelectedCategory(cat.toLowerCase())}
+              clickable
+            />
+          ))}
+        </Box>
+      </Box>
