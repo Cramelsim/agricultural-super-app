@@ -24,3 +24,11 @@ const ExplorePage = () => {
  const categories = [
     'All', 'Experts', 'Communities', 'Posts', 'Videos', 'Events'
   ];
+
+  const experts = [
+    { id: 1, name: 'Dr. Jane Farmer', role: 'Soil Scientist', location: 'Nairobi', followers: 1250, avatar: '' },
+    { id: 2, name: 'John AgriTech', role: 'Farm Technology', location: 'Kampala', followers: 890, avatar: '' },
+    { id: 3, name: 'Maria Green', role: 'Organic Farming', location: 'Accra', followers: 2100, avatar: '' },
+    { id: 4, name: 'David Harvest', role: 'Crop Specialist', location: 'Lagos', followers: 1500, avatar: '' },
+  ];
+
