@@ -20,3 +20,7 @@ import { Link } from 'react-router-dom';
 const ExplorePage = () => {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+ const categories = [
+    'All', 'Experts', 'Communities', 'Posts', 'Videos', 'Events'
+  ];
