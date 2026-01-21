@@ -1,3 +1,4 @@
+// src/pages/ExplorePage.jsx
 import React, { useState } from 'react';
 import {
   Container,
@@ -21,7 +22,7 @@ const ExplorePage = () => {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
- const categories = [
+  const categories = [
     'All', 'Experts', 'Communities', 'Posts', 'Videos', 'Events'
   ];
 
@@ -31,13 +32,15 @@ const ExplorePage = () => {
     { id: 3, name: 'Maria Green', role: 'Organic Farming', location: 'Accra', followers: 2100, avatar: '' },
     { id: 4, name: 'David Harvest', role: 'Crop Specialist', location: 'Lagos', followers: 1500, avatar: '' },
   ];
-const communities = [
+
+  const communities = [
     { id: 1, name: 'Organic Farmers', members: 5200, description: 'Discuss organic farming practices' },
     { id: 2, name: 'Dairy Farmers', members: 3200, description: 'For dairy farming enthusiasts' },
     { id: 3, name: 'Smart Irrigation', members: 1800, description: 'Modern irrigation techniques' },
     { id: 4, name: 'Young Farmers', members: 4100, description: 'Next generation of farmers' },
   ];
-   return (
+
+  return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
         Explore
@@ -57,8 +60,8 @@ const communities = [
           ),
         }}
       />
-
-<Box sx={{ mb: 4 }}>
+      
+      <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Categories
         </Typography>
@@ -74,7 +77,8 @@ const communities = [
           ))}
         </Box>
       </Box>
-       <Grid container spacing={3}>
+      
+      <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Typography variant="h5" gutterBottom>
             Top Experts
@@ -135,3 +139,5 @@ const communities = [
     </Container>
   );
 };
+
+export default ExplorePage;
