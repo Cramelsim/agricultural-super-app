@@ -31,4 +31,9 @@ const ExplorePage = () => {
     { id: 3, name: 'Maria Green', role: 'Organic Farming', location: 'Accra', followers: 2100, avatar: '' },
     { id: 4, name: 'David Harvest', role: 'Crop Specialist', location: 'Lagos', followers: 1500, avatar: '' },
   ];
-
+const communities = [
+    { id: 1, name: 'Organic Farmers', members: 5200, description: 'Discuss organic farming practices' },
+    { id: 2, name: 'Dairy Farmers', members: 3200, description: 'For dairy farming enthusiasts' },
+    { id: 3, name: 'Smart Irrigation', members: 1800, description: 'Modern irrigation techniques' },
+    { id: 4, name: 'Young Farmers', members: 4100, description: 'Next generation of farmers' },
+  ];
