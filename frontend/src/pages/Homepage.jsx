@@ -63,3 +63,16 @@ const HomePage = () => {
             </CardContent>
           </Card>
         </Grid>
+         <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%', textAlign: 'center' }}>
+            <CardContent>
+              <Group sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h5" gutterBottom>
+                Communities
+              </Typography>
+              <Typography>
+                Join farming communities and connect with peers
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
