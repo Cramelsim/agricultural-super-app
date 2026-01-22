@@ -76,3 +76,18 @@ const HomePage = () => {
             </CardContent>
           </Card>
         </Grid>
+         <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%', textAlign: 'center' }}>
+            <CardContent>
+              <Forum sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h5" gutterBottom>
+                Discussions
+              </Typography>
+              <Typography>
+                Share experiences and discuss farming challenges
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      
