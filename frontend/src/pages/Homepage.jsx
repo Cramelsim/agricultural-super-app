@@ -1,3 +1,4 @@
+// src/pages/HomePage.jsx
 import React from 'react';
 import { Container, Grid, Box, Typography, Button, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -33,8 +34,8 @@ const HomePage = () => {
           </Button>
         </Box>
       </Box>
-
-     {/* Features */}
+      
+      {/* Features */}
       <Grid container spacing={4} sx={{ mb: 8 }}>
         <Grid item xs={12} md={3}>
           <Card sx={{ height: '100%', textAlign: 'center' }}>
@@ -63,7 +64,8 @@ const HomePage = () => {
             </CardContent>
           </Card>
         </Grid>
-         <Grid item xs={12} md={3}>
+        
+        <Grid item xs={12} md={3}>
           <Card sx={{ height: '100%', textAlign: 'center' }}>
             <CardContent>
               <Group sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
@@ -76,7 +78,8 @@ const HomePage = () => {
             </CardContent>
           </Card>
         </Grid>
-         <Grid item xs={12} md={3}>
+        
+        <Grid item xs={12} md={3}>
           <Card sx={{ height: '100%', textAlign: 'center' }}>
             <CardContent>
               <Forum sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
@@ -91,7 +94,7 @@ const HomePage = () => {
         </Grid>
       </Grid>
       
-       {/* Call to Action */}
+      {/* Call to Action */}
       <Box sx={{ py: 6, textAlign: 'center', backgroundColor: 'grey.50', borderRadius: 2 }}>
         <Typography variant="h4" gutterBottom>
           Ready to Grow with Us?
@@ -105,4 +108,12 @@ const HomePage = () => {
           component={Link}
           to="/register"
           sx={{ mt: 2 }}
-        ></Button>
+        >
+          Get Started Free
+        </Button>
+      </Box>
+    </Container>
+  );
+};
+
+export default HomePage;
