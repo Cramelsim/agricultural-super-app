@@ -33,3 +33,33 @@ const HomePage = () => {
           </Button>
         </Box>
       </Box>
+
+     {/* Features */}
+      <Grid container spacing={4} sx={{ mb: 8 }}>
+        <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%', textAlign: 'center' }}>
+            <CardContent>
+              <Agriculture sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h5" gutterBottom>
+                Expert Advice
+              </Typography>
+              <Typography>
+                Get advice from agricultural experts and experienced farmers
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%', textAlign: 'center' }}>
+            <CardContent>
+              <TrendingUp sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h5" gutterBottom>
+                Market Prices
+              </Typography>
+              <Typography>
+                Stay updated with real-time market prices for your produce
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
