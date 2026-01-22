@@ -91,3 +91,18 @@ const HomePage = () => {
         </Grid>
       </Grid>
       
+       {/* Call to Action */}
+      <Box sx={{ py: 6, textAlign: 'center', backgroundColor: 'grey.50', borderRadius: 2 }}>
+        <Typography variant="h4" gutterBottom>
+          Ready to Grow with Us?
+        </Typography>
+        <Typography variant="h6" color="textSecondary" paragraph>
+          Join thousands of farmers already using AgriConnect
+        </Typography>
+        <Button
+          variant="contained"
+          size="large"
+          component={Link}
+          to="/register"
+          sx={{ mt: 2 }}
+        ></Button>
