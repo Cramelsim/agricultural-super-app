@@ -24,3 +24,5 @@ const MessagesPage = () => {
     { id: 3, name: 'Seed Supplier', lastMessage: 'Your order is ready', time: '2 days ago', unread: 1 },
     { id: 4, name: 'Farmers Group', lastMessage: 'Meeting this Saturday', time: '3 days ago', unread: 0 },
   ]);
+  const [selectedChat, setSelectedChat] = useState(1);
+  const [newMessage, setNewMessage] = useState('');
