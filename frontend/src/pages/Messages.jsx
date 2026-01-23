@@ -97,3 +97,47 @@ const MessagesPage = () => {
             </List>
           </Paper>
         </Grid>
+         {/* Chat Window */}
+        <Grid item xs={12} md={8}>
+          <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Chat Header */}
+            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+              <Typography variant="h6">
+                {messages.find(m => m.id === selectedChat)?.name}
+              </Typography>
+            </Box>
+            
+            {/* Messages Area */}
+            <Box sx={{ flexGrow: 1, p: 2, overflow: 'auto' }}>
+              {/* Messages would be rendered here */}
+              <Typography variant="body1" color="textSecondary" align="center" sx={{ mt: 4 }}>
+                Select a conversation to start messaging
+              </Typography>
+            </Box>
+            
+            {/* Message Input */}
+            <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <TextField
+                  fullWidth
+                  placeholder="Type your message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  size="small"
+                />
+                <Button
+                  variant="contained"
+                  onClick={handleSendMessage}
+                  disabled={!newMessage.trim()}
+                >
+                  <Send />
+                </Button>
+              </Box>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
