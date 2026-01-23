@@ -32,3 +32,9 @@ const MessagesPage = () => {
       setNewMessage('');
     }
   };
+
+   return (
+    <Container maxWidth="lg" sx={{ py: 4, height: '80vh' }}>
+      <Typography variant="h4" gutterBottom>
+        Messages
+      </Typography>
