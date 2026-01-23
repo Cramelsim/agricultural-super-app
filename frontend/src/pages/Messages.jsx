@@ -60,3 +60,40 @@ const MessagesPage = () => {
                   selected={selectedChat === chat.id}
                   onClick={() => setSelectedChat(chat.id)}
                 ></ListItem>
+                <ListItemAvatar>
+                    <Badge
+                      badgeContent={chat.unread}
+                      color="primary"
+                      invisible={chat.unread === 0}
+                    >
+                      <Avatar>{chat.name.charAt(0)}</Avatar>
+                    </Badge>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="subtitle2">{chat.name}</Typography>
+                        <Typography variant="caption" color="textSecondary">
+                          {chat.time}
+                        </Typography>
+                      </Box>
+                    }
+                    secondary={
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {chat.lastMessage}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
