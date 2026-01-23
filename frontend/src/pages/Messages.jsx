@@ -26,3 +26,9 @@ const MessagesPage = () => {
   ]);
   const [selectedChat, setSelectedChat] = useState(1);
   const [newMessage, setNewMessage] = useState('');
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      // Add message logic here
+      setNewMessage('');
+    }
+  };
