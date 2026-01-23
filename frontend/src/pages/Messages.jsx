@@ -1,3 +1,4 @@
+// src/pages/MessagesPage.jsx
 import React, { useState } from 'react';
 import {
   Container,
@@ -24,8 +25,10 @@ const MessagesPage = () => {
     { id: 3, name: 'Seed Supplier', lastMessage: 'Your order is ready', time: '2 days ago', unread: 1 },
     { id: 4, name: 'Farmers Group', lastMessage: 'Meeting this Saturday', time: '3 days ago', unread: 0 },
   ]);
+
   const [selectedChat, setSelectedChat] = useState(1);
   const [newMessage, setNewMessage] = useState('');
+
   const handleSendMessage = () => {
     if (newMessage.trim()) {
       // Add message logic here
@@ -33,11 +36,12 @@ const MessagesPage = () => {
     }
   };
 
-   return (
+  return (
     <Container maxWidth="lg" sx={{ py: 4, height: '80vh' }}>
       <Typography variant="h4" gutterBottom>
         Messages
       </Typography>
+      
       <Grid container spacing={2} sx={{ height: '100%' }}>
         {/* Chat List */}
         <Grid item xs={12} md={4}>
@@ -59,8 +63,8 @@ const MessagesPage = () => {
                   button
                   selected={selectedChat === chat.id}
                   onClick={() => setSelectedChat(chat.id)}
-                ></ListItem>
-                <ListItemAvatar>
+                >
+                  <ListItemAvatar>
                     <Badge
                       badgeContent={chat.unread}
                       color="primary"
@@ -97,7 +101,8 @@ const MessagesPage = () => {
             </List>
           </Paper>
         </Grid>
-         {/* Chat Window */}
+        
+        {/* Chat Window */}
         <Grid item xs={12} md={8}>
           <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             {/* Chat Header */}
@@ -141,3 +146,5 @@ const MessagesPage = () => {
     </Container>
   );
 };
+
+export default MessagesPage;
