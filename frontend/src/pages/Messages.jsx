@@ -38,3 +38,25 @@ const MessagesPage = () => {
       <Typography variant="h4" gutterBottom>
         Messages
       </Typography>
+      <Grid container spacing={2} sx={{ height: '100%' }}>
+        {/* Chat List */}
+        <Grid item xs={12} md={4}>
+          <Paper sx={{ height: '100%', overflow: 'auto' }}>
+            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+              <TextField
+                fullWidth
+                placeholder="Search conversations..."
+                size="small"
+                InputProps={{
+                  startAdornment: <Search fontSize="small" />,
+                }}
+              />
+            </Box>
+            <List>
+              {messages.map((chat) => (
+                <ListItem
+                  key={chat.id}
+                  button
+                  selected={selectedChat === chat.id}
+                  onClick={() => setSelectedChat(chat.id)}
+                ></ListItem>
