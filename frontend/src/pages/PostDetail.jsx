@@ -57,3 +57,14 @@ Remember, healthy soil means healthy plants!`,
       setComment('');
     }
   };
+  return (
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Button
+        startIcon={<ArrowBack />}
+        component={Link}
+        to="/feed"
+        sx={{ mb: 3 }}
+      >
+        Back to Feed
+      </Button>
+      
