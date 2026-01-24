@@ -15,3 +15,10 @@ import {
 import { Favorite, FavoriteBorder, Comment, Share, ArrowBack } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
+
+const PostDetailPage = () => {
+  const { id } = useParams();
+  const [comment, setComment] = useState('');
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(42);
+  
