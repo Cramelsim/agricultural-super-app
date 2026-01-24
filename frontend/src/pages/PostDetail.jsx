@@ -49,3 +49,11 @@ Remember, healthy soil means healthy plants!`,
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
   };
+
+    const handleSubmitComment = (e) => {
+    e.preventDefault();
+    if (comment.trim()) {
+      console.log('New comment:', comment);
+      setComment('');
+    }
+  };
