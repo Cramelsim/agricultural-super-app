@@ -45,3 +45,7 @@ Remember, healthy soil means healthy plants!`,
       { id: 2, user: 'Maria Green', text: 'Have you tried companion planting with basil?', time: '1 day ago' },
     ],
   };
+    const handleLike = () => {
+    setLiked(!liked);
+    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+  };
