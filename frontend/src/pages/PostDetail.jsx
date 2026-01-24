@@ -115,3 +115,7 @@ Remember, healthy soil means healthy plants!`,
         </Box>
         
         <Divider sx={{ mb: 4 }} />
+        {/* Comments */}
+        <Typography variant="h6" gutterBottom>
+          Comments ({post.comments.length})
+        </Typography>
