@@ -1,3 +1,4 @@
+// src/pages/PostDetailPage.jsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -22,6 +23,7 @@ const PostDetailPage = () => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(42);
   
+  // Mock post data
   const post = {
     id: id,
     title: 'Best Practices for Organic Tomato Farming',
@@ -45,18 +47,20 @@ Remember, healthy soil means healthy plants!`,
       { id: 2, user: 'Maria Green', text: 'Have you tried companion planting with basil?', time: '1 day ago' },
     ],
   };
-    const handleLike = () => {
+
+  const handleLike = () => {
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
   };
 
-    const handleSubmitComment = (e) => {
+  const handleSubmitComment = (e) => {
     e.preventDefault();
     if (comment.trim()) {
       console.log('New comment:', comment);
       setComment('');
     }
   };
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Button
@@ -67,6 +71,7 @@ Remember, healthy soil means healthy plants!`,
       >
         Back to Feed
       </Button>
+      
       <Paper elevation={3} sx={{ p: 4 }}>
         {/* Author Info */}
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -83,6 +88,7 @@ Remember, healthy soil means healthy plants!`,
             </Typography>
           </Box>
         </Box>
+        
         {/* Post Content */}
         <Typography variant="h4" gutterBottom>
           {post.title}
@@ -91,12 +97,14 @@ Remember, healthy soil means healthy plants!`,
         <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line', mb: 3 }}>
           {post.content}
         </Typography>
+        
         {/* Tags */}
         <Box sx={{ mb: 3 }}>
           {post.tags.map((tag, index) => (
             <Chip key={index} label={tag} size="small" sx={{ mr: 1, mb: 1 }} />
           ))}
         </Box>
+        
         {/* Actions */}
         <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
           <IconButton onClick={handleLike}>
@@ -115,11 +123,13 @@ Remember, healthy soil means healthy plants!`,
         </Box>
         
         <Divider sx={{ mb: 4 }} />
+        
         {/* Comments */}
         <Typography variant="h6" gutterBottom>
           Comments ({post.comments.length})
         </Typography>
-           {/* Comment Form */}
+        
+        {/* Comment Form */}
         <Box component="form" onSubmit={handleSubmitComment} sx={{ mb: 4 }}>
           <TextField
             fullWidth
@@ -134,7 +144,8 @@ Remember, healthy soil means healthy plants!`,
             Post Comment
           </Button>
         </Box>
-          {/* Comments List */}
+        
+        {/* Comments List */}
         {post.comments.map((comment) => (
           <Paper key={comment.id} variant="outlined" sx={{ p: 2, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -153,3 +164,5 @@ Remember, healthy soil means healthy plants!`,
     </Container>
   );
 };
+
+export default PostDetailPage;
