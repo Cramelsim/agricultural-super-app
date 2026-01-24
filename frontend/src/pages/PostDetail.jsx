@@ -91,3 +91,9 @@ Remember, healthy soil means healthy plants!`,
         <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line', mb: 3 }}>
           {post.content}
         </Typography>
+        {/* Tags */}
+        <Box sx={{ mb: 3 }}>
+          {post.tags.map((tag, index) => (
+            <Chip key={index} label={tag} size="small" sx={{ mr: 1, mb: 1 }} />
+          ))}
+        </Box>
