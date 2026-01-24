@@ -83,4 +83,11 @@ Remember, healthy soil means healthy plants!`,
             </Typography>
           </Box>
         </Box>
+        {/* Post Content */}
+        <Typography variant="h4" gutterBottom>
+          {post.title}
+        </Typography>
         
+        <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line', mb: 3 }}>
+          {post.content}
+        </Typography>
