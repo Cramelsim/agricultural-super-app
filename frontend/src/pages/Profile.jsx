@@ -35,3 +35,8 @@ const ProfilePage = () => {
     posts: 47,
     expertise: ['Organic Farming', 'Vegetables', 'Irrigation', 'Soil Health'],
   };
+  const userPosts = [
+    { id: 1, title: 'Tomato Blight Prevention', likes: 42, comments: 12, date: '2 days ago' },
+    { id: 2, title: 'Composting Guide for Beginners', likes: 85, comments: 24, date: '1 week ago' },
+    { id: 3, title: 'Drip Irrigation Setup', likes: 56, comments: 18, date: '2 weeks ago' },
+  ];
