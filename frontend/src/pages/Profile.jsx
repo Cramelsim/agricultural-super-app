@@ -17,3 +17,8 @@ import {
   Chip,
 } from '@mui/material';
 import { Edit, LocationOn, Email, Phone, Agriculture } from '@mui/icons-material';
+
+const ProfilePage = () => {
+  const { id } = useParams();
+  const [tabValue, setTabValue] = useState(0);
+  
