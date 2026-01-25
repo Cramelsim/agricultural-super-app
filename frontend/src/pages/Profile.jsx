@@ -74,3 +74,23 @@ const ProfilePage = () => {
               {user.bio}
             </Typography>
             
+Grid container spacing={2} sx={{ mb: 3 }}>
+              <Grid item xs={12} sm={6} md={4}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <LocationOn sx={{ mr: 1 }} />
+                  <Typography>{user.location}</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Email sx={{ mr: 1 }} />
+                  <Typography>{user.email}</Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Phone sx={{ mr: 1 }} />
+                  <Typography>{user.phone}</Typography>
+                </Box>
+              </Grid>
+            </Grid>
