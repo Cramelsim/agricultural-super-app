@@ -40,3 +40,7 @@ const ProfilePage = () => {
     { id: 2, title: 'Composting Guide for Beginners', likes: 85, comments: 24, date: '1 week ago' },
     { id: 3, title: 'Drip Irrigation Setup', likes: 56, comments: 18, date: '2 weeks ago' },
   ];
+   const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
