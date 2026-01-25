@@ -105,3 +105,27 @@ Grid container spacing={2} sx={{ mb: 3 }}>
                 ))}
               </Box>
             </Box>
+             {/* Stats */}
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                  <Typography variant="h6">{user.posts}</Typography>
+                  <Typography variant="body2">Posts</Typography>
+                </Paper>
+              </Grid>
+              <Grid item xs={4}>
+                <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                  <Typography variant="h6">{user.followers.toLocaleString()}</Typography>
+                  <Typography variant="body2">Followers</Typography>
+                </Paper>
+              </Grid>
+              <Grid item xs={4}>
+                <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
+                  <Typography variant="h6">{user.following}</Typography>
+                  <Typography variant="body2">Following</Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
