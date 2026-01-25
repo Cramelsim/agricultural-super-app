@@ -139,3 +139,28 @@ Grid container spacing={2} sx={{ mb: 3 }}>
           <Tab label="Communities" />
         </Tabs>
       </Box>
+      {/* Posts Grid */}
+      <Grid container spacing={3}>
+        {userPosts.map((post) => (
+          <Grid item xs={12} md={6} key={post.id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {post.title}
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                  <Typography variant="body2" color="textSecondary">
+                    {post.likes} likes • {post.comments} comments
+                  </Typography>
+                  <Typography variant="caption" color="textSecondary">
+                    {post.date}
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
+  );
+};
