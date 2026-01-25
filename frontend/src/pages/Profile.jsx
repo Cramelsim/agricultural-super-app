@@ -94,3 +94,14 @@ Grid container spacing={2} sx={{ mb: 3 }}>
                 </Box>
               </Grid>
             </Grid>
+             {/* Expertise */}
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Expertise
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {user.expertise.map((skill, index) => (
+                  <Chip key={index} label={skill} icon={<Agriculture />} />
+                ))}
+              </Box>
+            </Box>
