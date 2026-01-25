@@ -1,3 +1,4 @@
+// src/pages/ProfilePage.jsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -21,6 +22,7 @@ import { Edit, LocationOn, Email, Phone, Agriculture } from '@mui/icons-material
 const ProfilePage = () => {
   const { id } = useParams();
   const [tabValue, setTabValue] = useState(0);
+  
   // Mock user data
   const user = {
     name: 'John Farmer',
@@ -35,15 +37,18 @@ const ProfilePage = () => {
     posts: 47,
     expertise: ['Organic Farming', 'Vegetables', 'Irrigation', 'Soil Health'],
   };
+
   const userPosts = [
     { id: 1, title: 'Tomato Blight Prevention', likes: 42, comments: 12, date: '2 days ago' },
     { id: 2, title: 'Composting Guide for Beginners', likes: 85, comments: 24, date: '1 week ago' },
     { id: 3, title: 'Drip Irrigation Setup', likes: 56, comments: 18, date: '2 weeks ago' },
   ];
-   const handleTabChange = (event, newValue) => {
+
+  const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
- return (
+
+  return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Profile Header */}
       <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
@@ -74,7 +79,8 @@ const ProfilePage = () => {
               {user.bio}
             </Typography>
             
-Grid container spacing={2} sx={{ mb: 3 }}>
+            {/* User Info */}
+            <Grid container spacing={2} sx={{ mb: 3 }}>
               <Grid item xs={12} sm={6} md={4}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <LocationOn sx={{ mr: 1 }} />
@@ -94,7 +100,8 @@ Grid container spacing={2} sx={{ mb: 3 }}>
                 </Box>
               </Grid>
             </Grid>
-             {/* Expertise */}
+            
+            {/* Expertise */}
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" gutterBottom>
                 Expertise
@@ -105,7 +112,8 @@ Grid container spacing={2} sx={{ mb: 3 }}>
                 ))}
               </Box>
             </Box>
-             {/* Stats */}
+            
+            {/* Stats */}
             <Grid container spacing={2}>
               <Grid item xs={4}>
                 <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
@@ -128,9 +136,9 @@ Grid container spacing={2} sx={{ mb: 3 }}>
             </Grid>
           </Grid>
         </Grid>
-
       </Paper>
-        {/* Tabs */}
+      
+      {/* Tabs */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange}>
           <Tab label="Posts" />
@@ -139,6 +147,7 @@ Grid container spacing={2} sx={{ mb: 3 }}>
           <Tab label="Communities" />
         </Tabs>
       </Box>
+      
       {/* Posts Grid */}
       <Grid container spacing={3}>
         {userPosts.map((post) => (
@@ -164,3 +173,5 @@ Grid container spacing={2} sx={{ mb: 3 }}>
     </Container>
   );
 };
+
+export default ProfilePage;
