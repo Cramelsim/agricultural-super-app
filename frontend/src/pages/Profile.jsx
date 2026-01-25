@@ -43,4 +43,34 @@ const ProfilePage = () => {
    const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
+ return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* Profile Header */}
+      <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={3}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Avatar
+                sx={{ width: 150, height: 150, mb: 2 }}
+                src=""
+              >
+                {user.name.charAt(0)}
+              </Avatar>
+              <Button variant="outlined" startIcon={<Edit />}>
+                Edit Profile
+              </Button>
+            </Box>
+          </Grid>
+          
+          <Grid item xs={12} md={9}>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h4">{user.name}</Typography>
+              <Typography variant="h6" color="textSecondary">
+                {user.username}
+              </Typography>
+            </Box>
+            
+            <Typography variant="body1" paragraph>
+              {user.bio}
+            </Typography>
+            
