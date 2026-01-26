@@ -174,7 +174,7 @@ const RegisterPage = () => {
               />
             </Grid>
             
-            {/* REMOVED THE EXTRA </Grid> AND /> HERE */}
+            
             
             <Grid item xs={12} sm={6}>
               <TextField
