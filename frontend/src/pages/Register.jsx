@@ -27,3 +27,7 @@ const RegisterPage = () => {
     farmType: '',
     location: '',
   });
+   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [errors, setErrors] = useState({});
