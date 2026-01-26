@@ -54,3 +54,15 @@ const RegisterPage = () => {
     
     return newErrors;
   };
+   const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validateForm();
+    
+    if (Object.keys(validationErrors).length === 0) {
+      console.log('Registration data:', formData);
+      // Here you would dispatch registration action
+      alert('Registration successful!');
+    } else {
+      setErrors(validationErrors);
+    }
+  };
