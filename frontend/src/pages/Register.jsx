@@ -40,3 +40,17 @@ const RegisterPage = () => {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    if (!formData.password) newErrors.password = 'Password is required';
+    if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    if (!agreeToTerms) newErrors.terms = 'You must agree to the terms';
+    
+    return newErrors;
+  };
