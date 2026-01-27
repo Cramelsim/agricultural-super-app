@@ -41,3 +41,17 @@ const exploreSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+    // Fetch Experts
+      .addCase(fetchExperts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchExperts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.experts = action.payload;
+      })
+      .addCase(fetchExperts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
