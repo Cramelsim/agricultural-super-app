@@ -25,3 +25,19 @@ export const fetchCommunities = createAsyncThunk(
     }
   }
 );
+
+const exploreSlice = createSlice({
+  name: 'explore',
+  initialState: {
+    experts: [],
+    communities: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
