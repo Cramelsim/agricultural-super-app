@@ -1,3 +1,4 @@
+// src/store/slices/exploreSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 
@@ -41,8 +42,7 @@ const exploreSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
-    // Fetch Experts
+      // Fetch Experts
       .addCase(fetchExperts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -70,3 +70,6 @@ const exploreSlice = createSlice({
       });
   },
 });
+
+export const { clearError } = exploreSlice.actions;
+export default exploreSlice.reducer;
