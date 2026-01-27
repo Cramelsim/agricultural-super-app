@@ -55,3 +55,18 @@ const exploreSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      // Fetch Communities
+      .addCase(fetchCommunities.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCommunities.fulfilled, (state, action) => {
+        state.loading = false;
+        state.communities = action.payload;
+      })
+      .addCase(fetchCommunities.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
