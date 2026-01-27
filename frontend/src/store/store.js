@@ -13,6 +13,7 @@ const store = configureStore({
     users: userReducer,
     messages: messageReducer,
     communities: communityReducer,
+    explore: exploreReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
