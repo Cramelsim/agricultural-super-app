@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import postReducer from './slices/postSlice';
 import userReducer from './slices/userSlice';
 import messageReducer from './slices/messageSlice';
+import exploreReducer from './slices/exploreSlice';
 import communityReducer from './slices/communitySlice';
 
 const store = configureStore({
