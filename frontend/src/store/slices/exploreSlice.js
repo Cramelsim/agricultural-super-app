@@ -13,3 +13,15 @@ export const fetchExperts = createAsyncThunk(
     }
   }
 );
+
+export const fetchCommunities = createAsyncThunk(
+  'explore/fetchCommunities',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/communities');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch communities');
+    }
+  }
+);
