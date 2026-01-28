@@ -126,3 +126,72 @@ def get_explore_data():
     except Exception as e:
         current_app.logger.error(f'Get explore data error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    @explore_bp.route('/experts', methods=['GET'])
+def get_explore_experts():
+    """Get experts for explore page"""
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        search = request.args.get('search', '')
+        sort_by = request.args.get('sort_by', 'recent')  # recent, popular, name
+        user_type = request.args.get('user_type')  # expert, advisor, specialist
+        
+        query = User.query.filter(
+            (User.user_type.in_(['expert', 'advisor', 'specialist'])) |
+            (User.expertise_area.isnot(None))
+        ).filter(User.is_active == True)
+        
+        if user_type:
+            query = query.filter(User.user_type == user_type)
+        
+        if search:
+            query = query.filter(
+                (User.full_name.ilike(f'%{search}%')) |
+                (User.username.ilike(f'%{search}%')) |
+                (User.expertise_area.ilike(f'%{search}%')) |
+                (User.bio.ilike(f'%{search}%'))
+            )
+        
+        # Apply sorting
+        if sort_by == 'name':
+            query = query.order_by(User.full_name.asc())
+        elif sort_by == 'popular':
+            # Sort by follower count (this is a simplified version)
+            query = query.order_by(desc(User.created_at))
+        else:  # recent
+            query = query.order_by(desc(User.created_at))
+        
+        # Pagination
+        experts = query.paginate(page=page, per_page=per_page, error_out=False)
+        
+        experts_data = []
+        for expert in experts.items:
+            follower_count = Follow.query.filter_by(following_id=expert.id).count()
+            
+            experts_data.append({
+                'public_id': expert.public_id,
+                'name': expert.full_name or expert.username,
+                'username': expert.username,
+                'role': expert.expertise_area or expert.user_type.capitalize(),
+                'user_type': expert.user_type,
+                'location': expert.location,
+                'profile_image': expert.profile_image,
+                'bio': expert.bio,
+                'expertise_area': expert.expertise_area,
+                'follower_count': follower_count,
+                'post_count': len(expert.posts),
+                'created_at': expert.created_at.isoformat() if expert.created_at else None
+            })
+        
+        return jsonify({
+            'success': True,
+            'experts': experts_data,
+            'total': experts.total,
+            'page': experts.page,
+            'per_page': experts.per_page,
+            'pages': experts.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get explore experts error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
