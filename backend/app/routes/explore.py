@@ -4,3 +4,5 @@ from sqlalchemy import func, desc
 from datetime import datetime, timedelta
 from app import db
 from app.models import User, Community, Post, Follow, CommunityMember
+
+explore_bp = Blueprint('explore', __name__)
