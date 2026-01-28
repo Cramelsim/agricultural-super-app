@@ -195,3 +195,54 @@ def get_explore_experts():
     except Exception as e:
         current_app.logger.error(f'Get explore experts error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+    @explore_bp.route('/communities', methods=['GET'])
+def get_explore_communities():
+    """Get communities for explore page"""
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        search = request.args.get('search', '')
+        sort_by = request.args.get('sort_by', 'popular')  # popular, recent, name
+        
+        query = Community.query.filter(Community.is_public == True)
+        
+        if search:
+            query = query.filter(
+                (Community.name.ilike(f'%{search}%')) |
+                (Community.description.ilike(f'%{search}%'))
+            )
+        
+        # Apply sorting
+        if sort_by == 'name':
+            query = query.order_by(Community.name)
+        elif sort_by == 'recent':
+            query = query.order_by(desc(Community.created_at))
+        else:  # popular (by member count)
+            query = query.order_by(desc(Community.created_at))  # Placeholder
+        
+        # Pagination
+        communities = query.paginate(page=page, per_page=per_page, error_out=False)
+        
+        communities_data = []
+        for community in communities.items:
+            member_count = CommunityMember.query.filter_by(
+                community_id=community.id
+            ).count()
+            
+            community_dict = community.to_dict()
+            community_dict['member_count'] = member_count
+            communities_data.append(community_dict)
+        
+        return jsonify({
+            'success': True,
+            'communities': communities_data,
+            'total': communities.total,
+            'page': communities.page,
+            'per_page': communities.per_page,
+            'pages': communities.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get explore communities error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
