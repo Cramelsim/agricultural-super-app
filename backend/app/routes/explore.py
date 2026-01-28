@@ -30,3 +30,11 @@ def get_explore_data():
             )
         
         experts = experts_query.order_by(desc(User.created_at)).limit(limit).all()
+         # 2. Get Trending Communities (by member count)
+        communities_query = Community.query.filter(Community.is_public == True)
+        
+        if search:
+            communities_query = communities_query.filter(
+                (Community.name.ilike(f'%{search}%')) |
+                (Community.description.ilike(f'%{search}%'))
+            )
