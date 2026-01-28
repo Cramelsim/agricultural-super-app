@@ -299,3 +299,32 @@ def get_trending_posts():
     except Exception as e:
         current_app.logger.error(f'Get trending posts error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+    
+    @explore_bp.route('/categories', methods=['GET'])
+def get_categories():
+    """Get all post categories for filtering"""
+    try:
+        categories = db.session.query(Post.category).distinct().filter(
+            Post.category.isnot(None)
+        ).order_by(Post.category).all()
+        
+        categories_list = [category[0] for category in categories if category[0]]
+        
+        # Get counts for each category
+        categories_with_counts = []
+        for category in categories_list:
+            count = Post.query.filter_by(category=category).count()
+            categories_with_counts.append({
+                'name': category,
+                'count': count,
+                'slug': category.lower().replace(' ', '-')
+            })
+        
+        return jsonify({
+            'success': True,
+            'categories': categories_with_counts
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get categories error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
