@@ -38,3 +38,11 @@ def get_explore_data():
                 (Community.name.ilike(f'%{search}%')) |
                 (Community.description.ilike(f'%{search}%'))
             )
+            # Get communities with member counts
+        communities = []
+        for community in communities_query.order_by(desc(Community.created_at)).limit(limit).all():
+            member_count = CommunityMember.query.filter_by(community_id=community.id).count()
+            communities.append({
+                'community': community.to_dict(),
+                'member_count': member_count
+            })
