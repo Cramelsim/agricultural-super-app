@@ -46,3 +46,83 @@ def get_explore_data():
                 'community': community.to_dict(),
                 'member_count': member_count
             })
+            # Sort communities by member count
+        communities.sort(key=lambda x: x['member_count'], reverse=True)
+        
+        # 3. Get Trending Posts (most engagement in last week)
+        one_week_ago = datetime.utcnow() - timedelta(days=7)
+        
+        trending_query = Post.query.filter(Post.created_at >= one_week_ago)
+        
+        if category:
+            trending_query = trending_query.filter_by(category=category)
+        
+        if search:
+            trending_query = trending_query.filter(
+                (Post.title.ilike(f'%{search}%')) |
+                (Post.content.ilike(f'%{search}%'))
+            )
+        
+        trending_posts = trending_query.order_by(
+            desc(Post.like_count + Post.comment_count)
+        ).limit(limit).all()
+        
+        # 4. Get Categories (for filtering)
+        categories = db.session.query(Post.category).distinct().filter(
+            Post.category.isnot(None)
+        ).order_by(Post.category).limit(20).all()
+        
+        # Format response
+        experts_data = []
+        for expert in experts:
+            # Get follower count
+            follower_count = Follow.query.filter_by(following_id=expert.id).count()
+            
+            experts_data.append({
+                'public_id': expert.public_id,
+                'name': expert.full_name or expert.username,
+                'username': expert.username,
+                'role': expert.expertise_area or expert.user_type.capitalize(),
+                'user_type': expert.user_type,
+                'location': expert.location,
+                'profile_image': expert.profile_image,
+                'bio': expert.bio,
+                'expertise_area': expert.expertise_area,
+                'follower_count': follower_count,
+                'post_count': len(expert.posts),
+                'created_at': expert.created_at.isoformat() if expert.created_at else None
+            })
+        
+        communities_data = []
+        for community_info in communities[:limit]:  # Limit the number of communities
+            community_data = community_info['community']
+            community_data['member_count'] = community_info['member_count']
+            communities_data.append(community_data)
+        
+        trending_posts_data = []
+        for post in trending_posts:
+            post_data = post.to_dict()
+            # Add engagement score
+            post_data['engagement_score'] = post.like_count + post.comment_count
+            trending_posts_data.append(post_data)
+        
+        categories_data = [category[0] for category in categories if category[0]]
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'experts': experts_data,
+                'communities': communities_data,
+                'trending_posts': trending_posts_data,
+                'categories': categories_data,
+                'stats': {
+                    'total_experts': len(experts_data),
+                    'total_communities': len(communities_data),
+                    'total_trending_posts': len(trending_posts_data)
+                }
+            }
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get explore data error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
