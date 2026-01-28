@@ -246,3 +246,56 @@ def get_explore_communities():
     except Exception as e:
         current_app.logger.error(f'Get explore communities error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+@explore_bp.route('/trending', methods=['GET'])
+def get_trending_posts():
+    """Get trending posts for explore page"""
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        category = request.args.get('category')
+        time_frame = request.args.get('time_frame', 'week')  # day, week, month
+        search = request.args.get('search', '')
+        
+        # Calculate time filter
+        now = datetime.utcnow()
+        if time_frame == 'day':
+            time_filter = now - timedelta(days=1)
+        elif time_frame == 'month':
+            time_filter = now - timedelta(days=30)
+        else:  # week
+            time_filter = now - timedelta(days=7)
+        
+        query = Post.query.filter(Post.created_at >= time_filter)
+        
+        if category:
+            query = query.filter_by(category=category)
+        
+        if search:
+            query = query.filter(
+                (Post.title.ilike(f'%{search}%')) |
+                (Post.content.ilike(f'%{search}%'))
+            )
+        
+        # Sort by engagement (likes + comments)
+        posts = query.order_by(
+            desc(Post.like_count + Post.comment_count)
+        ).paginate(page=page, per_page=per_page, error_out=False)
+        
+        posts_data = []
+        for post in posts.items:
+            post_dict = post.to_dict()
+            post_dict['engagement_score'] = post.like_count + post.comment_count
+            posts_data.append(post_dict)
+        
+        return jsonify({
+            'success': True,
+            'posts': posts_data,
+            'total': posts.total,
+            'page': posts.page,
+            'per_page': posts.per_page,
+            'pages': posts.pages
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get trending posts error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
