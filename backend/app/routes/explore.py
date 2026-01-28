@@ -1,3 +1,4 @@
+# backend/routes/explore.py
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import func, desc
@@ -30,7 +31,8 @@ def get_explore_data():
             )
         
         experts = experts_query.order_by(desc(User.created_at)).limit(limit).all()
-         # 2. Get Trending Communities (by member count)
+        
+        # 2. Get Trending Communities (by member count)
         communities_query = Community.query.filter(Community.is_public == True)
         
         if search:
@@ -38,7 +40,8 @@ def get_explore_data():
                 (Community.name.ilike(f'%{search}%')) |
                 (Community.description.ilike(f'%{search}%'))
             )
-            # Get communities with member counts
+        
+        # Get communities with member counts
         communities = []
         for community in communities_query.order_by(desc(Community.created_at)).limit(limit).all():
             member_count = CommunityMember.query.filter_by(community_id=community.id).count()
@@ -46,7 +49,8 @@ def get_explore_data():
                 'community': community.to_dict(),
                 'member_count': member_count
             })
-            # Sort communities by member count
+        
+        # Sort communities by member count
         communities.sort(key=lambda x: x['member_count'], reverse=True)
         
         # 3. Get Trending Posts (most engagement in last week)
@@ -126,7 +130,8 @@ def get_explore_data():
     except Exception as e:
         current_app.logger.error(f'Get explore data error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
-    @explore_bp.route('/experts', methods=['GET'])
+
+@explore_bp.route('/experts', methods=['GET'])
 def get_explore_experts():
     """Get experts for explore page"""
     try:
@@ -195,8 +200,8 @@ def get_explore_experts():
     except Exception as e:
         current_app.logger.error(f'Get explore experts error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
-    
-    @explore_bp.route('/communities', methods=['GET'])
+
+@explore_bp.route('/communities', methods=['GET'])
 def get_explore_communities():
     """Get communities for explore page"""
     try:
@@ -246,6 +251,7 @@ def get_explore_communities():
     except Exception as e:
         current_app.logger.error(f'Get explore communities error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
+
 @explore_bp.route('/trending', methods=['GET'])
 def get_trending_posts():
     """Get trending posts for explore page"""
@@ -299,8 +305,8 @@ def get_trending_posts():
     except Exception as e:
         current_app.logger.error(f'Get trending posts error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
-    
-    @explore_bp.route('/categories', methods=['GET'])
+
+@explore_bp.route('/categories', methods=['GET'])
 def get_categories():
     """Get all post categories for filtering"""
     try:
@@ -327,4 +333,51 @@ def get_categories():
         
     except Exception as e:
         current_app.logger.error(f'Get categories error: {str(e)}')
+        return jsonify({'error': 'Internal server error'}), 500
+
+@explore_bp.route('/stats', methods=['GET'])
+def get_explore_stats():
+    """Get explore page statistics"""
+    try:
+        # Total experts
+        total_experts = User.query.filter(
+            (User.user_type.in_(['expert', 'advisor', 'specialist'])) |
+            (User.expertise_area.isnot(None))
+        ).filter(User.is_active == True).count()
+        
+        # Total communities
+        total_communities = Community.query.filter_by(is_public=True).count()
+        
+        # Total posts (last 30 days)
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        recent_posts = Post.query.filter(Post.created_at >= thirty_days_ago).count()
+        
+        # Top categories (by post count)
+        top_categories = db.session.query(
+            Post.category, 
+            func.count(Post.id).label('post_count')
+        ).filter(
+            Post.category.isnot(None),
+            Post.created_at >= thirty_days_ago
+        ).group_by(Post.category).order_by(
+            func.count(Post.id).desc()
+        ).limit(5).all()
+        
+        top_categories_data = [
+            {'name': cat[0], 'count': cat[1]}
+            for cat in top_categories if cat[0]
+        ]
+        
+        return jsonify({
+            'success': True,
+            'stats': {
+                'total_experts': total_experts,
+                'total_communities': total_communities,
+                'recent_posts': recent_posts,
+                'top_categories': top_categories_data
+            }
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Get explore stats error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
