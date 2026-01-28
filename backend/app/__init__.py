@@ -48,6 +48,7 @@ def create_app(config_class=Config):
     app.register_blueprint(messages_bp, url_prefix='/api/messages')
     app.register_blueprint(follows_bp, url_prefix='/api/follows')
     app.register_blueprint(communities_bp, url_prefix='/api/communities')
+    app.register_blueprint(explore_bp, url_prefix='/api/explore')
     
     # Create tables and add test data
     with app.app_context():
