@@ -38,7 +38,7 @@ def create_app(config_class=Config):
     from app.routes.messages import messages_bp
     from app.routes.follows import follows_bp
     from app.routes.communities import communities_bp
-    from routes.explore import explore_bp
+    from app.routes.explore import explore_bp
 
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
