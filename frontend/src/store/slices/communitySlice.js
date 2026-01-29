@@ -1,52 +1,27 @@
+// src/store/slices/communitySlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../services/api';
+import api from '../../api/axios';
 
 export const getCommunities = createAsyncThunk(
   'communities/getCommunities',
-  async (params, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
       const response = await api.get('/communities', { params });
-      return response.data;
+      return response.data; // Should return { communities: [], total, page, per_page, pages }
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch communities');
     }
   }
 );
 
-export const getCommunity = createAsyncThunk(
-  'communities/getCommunity',
-  async (communityId, { rejectWithValue }) => {
+export const getUserCommunities = createAsyncThunk(
+  'communities/getUserCommunities',
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/communities/${communityId}`);
-      return response.data;
+      const response = await api.get('/communities/user/joined');
+      return response.data.communities || [];
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const createCommunity = createAsyncThunk(
-  'communities/createCommunity',
-  async (communityData, { rejectWithValue }) => {
-    try {
-      const formData = new FormData();
-      
-      Object.keys(communityData).forEach(key => {
-        if (key === 'image' && communityData[key]) {
-          formData.append('image', communityData[key]);
-        } else {
-          formData.append(key, communityData[key]);
-        }
-      });
-      
-      const response = await api.post('/communities', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch user communities');
     }
   }
 );
@@ -56,112 +31,86 @@ export const joinCommunity = createAsyncThunk(
   async (communityId, { rejectWithValue }) => {
     try {
       const response = await api.post(`/communities/${communityId}/join`);
-      return { communityId, ...response.data };
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const getUserCommunities = createAsyncThunk(
-  'communities/getUserCommunities',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await api.get('/communities/user/joined', { params });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.error || 'Failed to join community');
     }
   }
 );
 
-export const getCommunityMembers = createAsyncThunk(
-  'communities/getCommunityMembers',
-  async (communityId, { rejectWithValue }) => {
+export const createCommunity = createAsyncThunk(
+  'communities/createCommunity',
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/communities/${communityId}/members`);
-      return { communityId, ...response.data };
+      const response = await api.post('/communities', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.error || 'Failed to create community');
     }
   }
 );
-
-const initialState = {
-  communities: [],
-  currentCommunity: null,
-  userCommunities: [],
-  communityMembers: [],
-  isLoading: false,
-  error: null,
-  total: 0,
-  page: 1,
-};
 
 const communitySlice = createSlice({
   name: 'communities',
-  initialState,
+  initialState: {
+    communities: [],
+    userCommunities: [],
+    isLoading: false,
+    error: null,
+    total: 0,
+    page: 1,
+    per_page: 20,
+    pages: 1,
+  },
   reducers: {
-    clearCommunities: (state) => {
-      state.communities = [];
-      state.total = 0;
-    },
-    clearCurrentCommunity: (state) => {
-      state.currentCommunity = null;
-    },
     clearError: (state) => {
       state.error = null;
+    },
+    clearCommunities: (state) => {
+      state.communities = [];
+      state.userCommunities = [];
     },
   },
   extraReducers: (builder) => {
     builder
+      // Get Communities
       .addCase(getCommunities.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(getCommunities.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.communities = action.payload.communities;
-        state.total = action.payload.total;
-        state.page = action.payload.page;
+        state.communities = action.payload.communities || [];
+        state.total = action.payload.total || 0;
+        state.page = action.payload.page || 1;
+        state.per_page = action.payload.per_page || 20;
+        state.pages = action.payload.pages || 1;
       })
       .addCase(getCommunities.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload?.error || 'Failed to load communities';
+        state.error = action.payload;
       })
       
-      .addCase(getCommunity.fulfilled, (state, action) => {
-        state.currentCommunity = action.payload.community;
-      })
-      
-      .addCase(createCommunity.fulfilled, (state, action) => {
-        state.communities.unshift(action.payload.community);
-      })
-      
-      .addCase(joinCommunity.fulfilled, (state, action) => {
-        const { communityId, is_member } = action.payload;
-        const index = state.communities.findIndex(c => c.public_id === communityId);
-        
-        if (index !== -1) {
-          state.communities[index].is_member = is_member;
-          state.communities[index].member_count += is_member ? 1 : -1;
-        }
-        
-        if (state.currentCommunity && state.currentCommunity.public_id === communityId) {
-          state.currentCommunity.is_member = is_member;
-          state.currentCommunity.member_count += is_member ? 1 : -1;
-        }
-      })
-      
+      // Get User Communities
       .addCase(getUserCommunities.fulfilled, (state, action) => {
-        state.userCommunities = action.payload.communities;
+        state.userCommunities = action.payload;
       })
       
-      .addCase(getCommunityMembers.fulfilled, (state, action) => {
-        // Store members for current community
+      // Join Community
+      .addCase(joinCommunity.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      
+      // Create Community
+      .addCase(createCommunity.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearCommunities, clearCurrentCommunity, clearError } = communitySlice.actions;
+export const { clearError, clearCommunities } = communitySlice.actions;
 export default communitySlice.reducer;
