@@ -6,8 +6,9 @@ export const getCommunities = createAsyncThunk(
   'communities/getCommunities',
   async (params = {}, { rejectWithValue }) => {
     try {
-      const response = await api.get('/communities', { params });
-      return response.data; // Should return { communities: [], total, page, per_page, pages }
+      // Add trailing slash
+      const response = await api.get('/communities/', { params });
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error || 'Failed to fetch communities');
     }
