@@ -6,7 +6,6 @@ export const getCommunities = createAsyncThunk(
   'communities/getCommunities',
   async (params = {}, { rejectWithValue }) => {
     try {
-      // Add trailing slash
       const response = await api.get('/communities/', { params });
       return response.data;
     } catch (error) {
@@ -31,7 +30,8 @@ export const joinCommunity = createAsyncThunk(
   'communities/joinCommunity',
   async (communityId, { rejectWithValue }) => {
     try {
-      const response = await api.post(`/communities/${communityId}/join`);
+      // Add trailing slash
+      const response = await api.post(`/communities/${communityId}/join/`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error || 'Failed to join community');
