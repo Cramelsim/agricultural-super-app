@@ -30,7 +30,7 @@ export const createPost = createAsyncThunk(
   'posts/createPost',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/posts', formData, {
+      const response = await api.post('/posts/', formData, {  // Add slash
         headers: {
           'Content-Type': 'multipart/form-data',
         },
