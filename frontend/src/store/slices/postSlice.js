@@ -6,7 +6,7 @@ export const getPosts = createAsyncThunk(
   'posts/getPosts',
   async (params = {}, { rejectWithValue }) => {
     try {
-      const response = await api.get('/posts', { params });
+      const response = await api.get('/posts/', { params });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.error || 'Failed to fetch posts');
