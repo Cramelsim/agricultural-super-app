@@ -70,10 +70,10 @@ export const likePost = createAsyncThunk(
   'posts/likePost',
   async (postId, { rejectWithValue }) => {
     try {
-      const response = await api.post(`/posts/${postId}/like`);
-      return { postId, ...response.data };
+      const response = await api.post(`/posts/${postId}/like/`);  // Add slash
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.error || 'Failed to like post');
     }
   }
 );
