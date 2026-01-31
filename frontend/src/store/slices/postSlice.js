@@ -146,21 +146,24 @@ const postSlice = createSlice({
         state.error = action.payload?.error || 'Failed to create post';
       })
       
-      // Like Post
+      
       .addCase(likePost.fulfilled, (state, action) => {
-        const { postId, liked, like_count } = action.payload;
-        const postIndex = state.posts.findIndex(p => p.public_id === postId);
-        
-        if (postIndex !== -1) {
-          state.posts[postIndex].liked = liked;
-          state.posts[postIndex].like_count = like_count;
-        }
-        
-        if (state.currentPost && state.currentPost.public_id === postId) {
-          state.currentPost.liked = liked;
-          state.currentPost.like_count = like_count;
-        }
-      })
+      const { liked, like_count } = action.payload;
+      const postId = action.meta.arg; // postId passed to thunk
+      
+      // Update the post in Redux store
+      const postIndex = state.posts.findIndex(p => p.public_id === postId);
+      if (postIndex !== -1) {
+        state.posts[postIndex].liked = liked;
+        state.posts[postIndex].like_count = like_count;
+      }
+    })
+    
+    .addCase(likePost.rejected, (state, action) => {
+      // Error is already handled in component
+      state.error = action.payload;
+    });
+}
       
       // Delete Post
       .addCase(deletePost.fulfilled, (state, action) => {
