@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { likePost, getPosts } from '../store/slices/postSlice';
 
 import {
   Container,
@@ -15,7 +14,6 @@ import {
   Button,
   IconButton,
   Box,
-  TextField,
   Avatar,
   Chip,
   CircularProgress,
@@ -46,34 +44,91 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 const FeedPage = () => {
   const dispatch = useDispatch();
-  const { posts, isLoading, error } = useSelector((state) => state.posts);
+  const { posts: reduxPosts, isLoading, error } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
   
   const [filter, setFilter] = useState('all');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
+  
+  // State to track which posts are liked by current user
   const [likedPosts, setLikedPosts] = useState({});
+  // State to track optimistic like counts
+  const [optimisticLikeCounts, setOptimisticLikeCounts] = useState({});
   
   // Initialize likedPosts from posts data
   useEffect(() => {
-    if (posts.length > 0) {
+    if (reduxPosts.length > 0) {
       const likedMap = {};
-      posts.forEach(post => {
-        // Check if post has liked property from backend
-        if (post.liked !== undefined) {
-          likedMap[post.public_id] = post.liked;
-        }
+      const likeCountMap = {};
+      
+      reduxPosts.forEach(post => {
+        // Use post.liked if available from backend, otherwise default to false
+        likedMap[post.public_id] = post.liked || false;
+        likeCountMap[post.public_id] = post.like_count || 0;
       });
+      
       setLikedPosts(likedMap);
+      setOptimisticLikeCounts(likeCountMap);
     }
-  }, [posts]);
+  }, [reduxPosts]);
   
   useEffect(() => {
     dispatch(getPosts());
   }, [dispatch]);
   
-  const handleLike = (postId) => {
-    dispatch(likePost(postId));
+  const handleLike = async (postId) => {
+    try {
+      // Get current liked state and like count
+      const currentlyLiked = likedPosts[postId] || false;
+      const currentLikeCount = optimisticLikeCounts[postId] || 0;
+      
+      // OPTIMISTIC UPDATE: Immediately update UI
+      // 1. Toggle liked state
+      setLikedPosts(prev => ({
+        ...prev,
+        [postId]: !currentlyLiked
+      }));
+      
+      // 2. Update like count optimistically
+      setOptimisticLikeCounts(prev => ({
+        ...prev,
+        [postId]: currentlyLiked ? currentLikeCount - 1 : currentLikeCount + 1
+      }));
+      
+      // 3. Call the API
+      const result = await dispatch(likePost(postId));
+      
+      // 4. If API fails, revert optimistic update
+      if (result.meta.requestStatus === 'rejected') {
+        // Revert liked state
+        setLikedPosts(prev => ({
+          ...prev,
+          [postId]: currentlyLiked // Revert to original state
+        }));
+        
+        // Revert like count
+        setOptimisticLikeCounts(prev => ({
+          ...prev,
+          [postId]: currentLikeCount // Revert to original count
+        }));
+        
+        console.error('Failed to like post:', result.payload);
+        
+        // Show error toast (you can add a toast notification here)
+        // alert('Failed to like post. Please try again.');
+      }
+      
+      // If API succeeds, the data is already updated via Redux
+      // We'll refetch posts to ensure consistency
+      if (result.meta.requestStatus === 'fulfilled') {
+        // Optional: Refetch posts to sync with server
+        // dispatch(getPosts());
+      }
+      
+    } catch (error) {
+      console.error('Error in handleLike:', error);
+    }
   };
   
   const handleMenuOpen = (event, post) => {
@@ -105,6 +160,20 @@ const FeedPage = () => {
     // Implement save functionality
     handleMenuClose();
   };
+  
+  // Use posts from Redux, but override with optimistic updates
+  const posts = reduxPosts.map(post => {
+    const postId = post.public_id;
+    return {
+      ...post,
+      // Use optimistic liked state if available, otherwise use post.liked
+      liked: likedPosts[postId] !== undefined ? likedPosts[postId] : (post.liked || false),
+      // Use optimistic like count if available, otherwise use post.like_count
+      like_count: optimisticLikeCounts[postId] !== undefined 
+        ? optimisticLikeCounts[postId] 
+        : (post.like_count || 0)
+    };
+  });
   
   const filteredPosts = posts.filter((post) => {
     if (filter === 'all') return true;
@@ -188,114 +257,137 @@ const FeedPage = () => {
               No posts found. Be the first to share agricultural knowledge!
             </Alert>
           ) : (
-            filteredPosts.map((post) => (
-              <StyledCard key={post.public_id}>
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      src={post.author?.profile_image}
-                      alt={post.author?.username}
-                      component={Link}
-                      to={`/profile/${post.author?.public_id}`}
-                    />
-                  }
-                  action={
-                    <IconButton onClick={(e) => handleMenuOpen(e, post)}>
-                      <MoreVert />
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="subtitle1" component="div">
-                      {post.author?.full_name || post.author?.username}
-                    </Typography>
-                  }
-                  subheader={
-                    <Typography variant="caption" color="textSecondary">
-                      {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
-                      {post.category && ` • ${post.category}`}
-                    </Typography>
-                  }
-                />
-                
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {post.title}
-                  </Typography>
-                  <Typography variant="body1" paragraph>
-                    {post.content.length > 500
-                      ? `${post.content.substring(0, 500)}...`
-                      : post.content}
-                  </Typography>
+            filteredPosts.map((post) => {
+              const isLiked = post.liked;
+              const likeCount = post.like_count;
+              
+              return (
+                <StyledCard key={post.public_id}>
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        src={post.author?.profile_image}
+                        alt={post.author?.username}
+                        component={Link}
+                        to={`/profile/${post.author?.public_id}`}
+                      />
+                    }
+                    action={
+                      <IconButton onClick={(e) => handleMenuOpen(e, post)}>
+                        <MoreVert />
+                      </IconButton>
+                    }
+                    title={
+                      <Typography variant="subtitle1" component="div">
+                        {post.author?.full_name || post.author?.username}
+                      </Typography>
+                    }
+                    subheader={
+                      <Typography variant="caption" color="textSecondary">
+                        {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
+                        {post.category && ` • ${post.category}`}
+                      </Typography>
+                    }
+                  />
                   
-                  {/* Images */}
-                  {post.image_urls && post.image_urls.length > 0 && (
-                    <Grid container spacing={1} sx={{ mt: 2 }}>
-                      {post.image_urls.slice(0, 3).map((url, index) => (
-                        <Grid item xs={4} key={index}>
-                          <CardMedia
-                            component="img"
-                            height="140"
-                            image={`http://localhost:5000${url}`}
-                            alt={`Post image ${index + 1}`}
-                            sx={{ borderRadius: 1 }}
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      {post.title}
+                    </Typography>
+                    <Typography variant="body1" paragraph>
+                      {post.content.length > 500
+                        ? `${post.content.substring(0, 500)}...`
+                        : post.content}
+                    </Typography>
+                    
+                    {/* Images */}
+                    {post.image_urls && post.image_urls.length > 0 && (
+                      <Grid container spacing={1} sx={{ mt: 2 }}>
+                        {post.image_urls.slice(0, 3).map((url, index) => (
+                          <Grid item xs={4} key={index}>
+                            <CardMedia
+                              component="img"
+                              height="140"
+                              image={`http://localhost:5000${url}`}
+                              alt={`Post image ${index + 1}`}
+                              sx={{ borderRadius: 1 }}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    )}
+                    
+                    {/* Tags */}
+                    {post.tags && post.tags.length > 0 && (
+                      <Box sx={{ mt: 2 }}>
+                        {post.tags.map((tag, index) => (
+                          <Chip
+                            key={index}
+                            label={tag}
+                            size="small"
+                            sx={{ mr: 0.5, mb: 0.5 }}
                           />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  )}
+                        ))}
+                      </Box>
+                    )}
+                  </CardContent>
                   
-                  {/* Tags */}
-                  {post.tags && post.tags.length > 0 && (
-                    <Box sx={{ mt: 2 }}>
-                      {post.tags.map((tag, index) => (
-                        <Chip
-                          key={index}
-                          label={tag}
-                          size="small"
-                          sx={{ mr: 0.5, mb: 0.5 }}
-                        />
-                      ))}
-                    </Box>
-                  )}
-                </CardContent>
-                
-                <CardActions>
-                  <IconButton
-                    aria-label="like"
-                    onClick={() => handleLike(post.public_id)}
-                  >
-                    {post.liked ? <Favorite color="error" /> : <FavoriteBorder />}
-                    <Typography variant="body2" sx={{ ml: 0.5 }}>
-                      {post.like_count}
-                    </Typography>
-                  </IconButton>
-                  
-                  <IconButton
-                    aria-label="comment"
-                    component={Link}
-                    to={`/post/${post.public_id}`}
-                  >
-                    <Comment />
-                    <Typography variant="body2" sx={{ ml: 0.5 }}>
-                      {post.comment_count}
-                    </Typography>
-                  </IconButton>
-                  
-                  <IconButton aria-label="share">
-                    <Share />
-                  </IconButton>
-                  
-                  <Button
-                    size="small"
-                    component={Link}
-                    to={`/post/${post.public_id}`}
-                    sx={{ ml: 'auto' }}
-                  >
-                    Read More
-                  </Button>
-                </CardActions>
-              </StyledCard>
-            ))
+                  <CardActions>
+                    <IconButton
+                      aria-label="like"
+                      onClick={() => handleLike(post.public_id)}
+                      sx={{
+                        '&:hover': {
+                          color: isLiked ? 'error.main' : 'inherit'
+                        }
+                      }}
+                    >
+                      {isLiked ? (
+                        <Favorite sx={{ color: 'error.main' }} />  // Red heart when liked
+                      ) : (
+                        <FavoriteBorder />
+                      )}
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          ml: 0.5,
+                          color: isLiked ? 'error.main' : 'inherit'
+                        }}
+                      >
+                        {likeCount}
+                      </Typography>
+                    </IconButton>
+                    
+                    <IconButton
+                      aria-label="comment"
+                      component={Link}
+                      to={`/post/${post.public_id}`}
+                    >
+                      <Comment />
+                      <Typography variant="body2" sx={{ ml: 0.5 }}>
+                        {post.comment_count || 0}
+                      </Typography>
+                    </IconButton>
+                    
+                    <IconButton 
+                      aria-label="share"
+                      onClick={() => handleMenuOpen(null, post)}
+                    >
+                      <Share />
+                    </IconButton>
+                    
+                    <Button
+                      size="small"
+                      component={Link}
+                      to={`/post/${post.public_id}`}
+                      sx={{ ml: 'auto' }}
+                    >
+                      Read More
+                    </Button>
+                  </CardActions>
+                </StyledCard>
+              );
+            })
           )}
         </Grid>
         
