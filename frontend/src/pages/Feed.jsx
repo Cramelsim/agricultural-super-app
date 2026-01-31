@@ -50,6 +50,7 @@ const FeedPage = () => {
   const [filter, setFilter] = useState('all');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
+   const [likedPosts, setLikedPosts] = useState({});
   
   useEffect(() => {
     dispatch(getPosts());
