@@ -23,10 +23,10 @@ def register():
         if not validate_email(data['email']):
             return jsonify({'error': 'Invalid email address'}), 400
         
-        # Validate password
-        password_error = validate_password(data['password'])
-        if password_error:
-            return jsonify({'error': password_error}), 400
+        # FIX: Check the first element of the tuple
+        is_valid, message = validate_password(data['password'])
+        if not is_valid:
+            return jsonify({'error': message}), 400
         
         # Check if user exists
         if User.query.filter_by(email=data['email']).first():

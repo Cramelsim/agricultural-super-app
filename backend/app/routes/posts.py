@@ -164,9 +164,11 @@ def delete_post(post_id):
         current_app.logger.error(f'Delete post error: {str(e)}')
         return jsonify({'error': 'Internal server error'}), 500
 
-@posts_bp.route('/<string:post_id>/like', methods=['POST'])
+# In posts.py, update the like route
+@posts_bp.route('/<string:post_id>/like', methods=['POST'], defaults={'path': ''})
+@posts_bp.route('/<string:post_id>/like/', methods=['POST'])
 @jwt_required()
-def toggle_like(post_id):
+def toggle_like(post_id, path=None):
     try:
         current_user_id = get_jwt_identity()
         user = User.query.filter_by(public_id=current_user_id).first()
@@ -174,6 +176,9 @@ def toggle_like(post_id):
         
         if not post:
             return jsonify({'error': 'Post not found'}), 404
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
         
         # Check if already liked
         existing_like = Like.query.filter_by(post_id=post.id, user_id=user.id).first()
@@ -198,7 +203,4 @@ def toggle_like(post_id):
             'like_count': post.like_count
         }), 200
         
-    except Exception as e:
-        db.session.rollback()
-        current_app.logger.error(f'Like error: {str(e)}')
-        return jsonify({'error': 'Internal server error'}), 500
+   
