@@ -146,24 +146,26 @@ const postSlice = createSlice({
         state.error = action.payload?.error || 'Failed to create post';
       })
       
-      
-      .addCase(likePost.fulfilled, (state, action) => {
-      const { liked, like_count } = action.payload;
-      const postId = action.meta.arg; // postId passed to thunk
-      
-      // Update the post in Redux store
-      const postIndex = state.posts.findIndex(p => p.public_id === postId);
-      if (postIndex !== -1) {
-        state.posts[postIndex].liked = liked;
-        state.posts[postIndex].like_count = like_count;
-      }
-    })
-    
-    .addCase(likePost.rejected, (state, action) => {
-      // Error is already handled in component
-      state.error = action.payload;
-    });
-}
+      // Update Post (you might want to add this if not present)
+      .addCase(updatePost.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const updatedPost = action.payload.post;
+        const index = state.posts.findIndex(p => p.public_id === updatedPost.public_id);
+        if (index !== -1) {
+          state.posts[index] = updatedPost;
+        }
+        if (state.currentPost && state.currentPost.public_id === updatedPost.public_id) {
+          state.currentPost = updatedPost;
+        }
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.error || 'Failed to update post';
+      })
       
       // Delete Post
       .addCase(deletePost.fulfilled, (state, action) => {
@@ -171,6 +173,28 @@ const postSlice = createSlice({
         if (state.currentPost && state.currentPost.public_id === action.payload) {
           state.currentPost = null;
         }
+      })
+      
+      // Like Post
+      .addCase(likePost.fulfilled, (state, action) => {
+        const { liked, like_count } = action.payload;
+        const postId = action.meta.arg; // postId passed to thunk
+        
+        // Update the post in Redux store
+        const postIndex = state.posts.findIndex(p => p.public_id === postId);
+        if (postIndex !== -1) {
+          state.posts[postIndex].liked = liked;
+          state.posts[postIndex].like_count = like_count;
+        }
+        
+        // Also update currentPost if it's the liked post
+        if (state.currentPost && state.currentPost.public_id === postId) {
+          state.currentPost.liked = liked;
+          state.currentPost.like_count = like_count;
+        }
+      })
+      .addCase(likePost.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });
