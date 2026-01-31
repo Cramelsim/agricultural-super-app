@@ -52,7 +52,21 @@ const FeedPage = () => {
   const [filter, setFilter] = useState('all');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
-   const [likedPosts, setLikedPosts] = useState({});
+  const [likedPosts, setLikedPosts] = useState({});
+  
+  // Initialize likedPosts from posts data
+  useEffect(() => {
+    if (posts.length > 0) {
+      const likedMap = {};
+      posts.forEach(post => {
+        // Check if post has liked property from backend
+        if (post.liked !== undefined) {
+          likedMap[post.public_id] = post.liked;
+        }
+      });
+      setLikedPosts(likedMap);
+    }
+  }, [posts]);
   
   useEffect(() => {
     dispatch(getPosts());
