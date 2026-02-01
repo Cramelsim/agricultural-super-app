@@ -115,5 +115,5 @@ const messageSlice = createSlice({
   },
 });
 
-export const { clearConversations, clearCurrentConversation, addMessage, clearError } = messageSlice.actions;
+export const { clearConversations, clearCurrentConversation, addMessage, clearError , fetchMessages, markAsRead, fetchConversations, createConversation} = messageSlice.actions;
 export default messageSlice.reducer;
