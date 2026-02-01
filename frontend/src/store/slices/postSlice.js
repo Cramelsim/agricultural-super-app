@@ -1,82 +1,44 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../services/api';
 
-// Async thunks
-export const getPosts = createAsyncThunk(
-  'posts/getPosts',
-  async (params = {}, { rejectWithValue }) => {
+// Async thunks (add comment thunks)
+export const addComment = createAsyncThunk(
+  'posts/addComment',
+  async ({ postId, commentData }, { rejectWithValue }) => {
     try {
-      const response = await api.get('/posts/', { params });
-      return response.data;
+      const response = await api.post(`/posts/${postId}/comments/`, commentData);
+      return { postId, comment: response.data.comment };
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to fetch posts');
+      return rejectWithValue(error.response?.data?.error || 'Failed to add comment');
     }
   }
 );
 
-export const getPost = createAsyncThunk(
-  'posts/getPost',
-  async (postId, { rejectWithValue }) => {
+export const getComments = createAsyncThunk(
+  'posts/getComments',
+  async ({ postId, params = {} }, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/posts/${postId}`);
-      return response.data;
+      const response = await api.get(`/posts/${postId}/comments/`, { params });
+      return { postId, comments: response.data.comments };
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch comments');
     }
   }
 );
 
-export const createPost = createAsyncThunk(
-  'posts/createPost',
-  async (formData, { rejectWithValue }) => {
+export const deleteComment = createAsyncThunk(
+  'posts/deleteComment',
+  async ({ postId, commentId }, { rejectWithValue }) => {
     try {
-      const response = await api.post('/posts/', formData, {  // Add slash
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
+      await api.delete(`/posts/${postId}/comments/${commentId}`);
+      return { postId, commentId };
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to create post');
+      return rejectWithValue(error.response?.data?.error || 'Failed to delete comment');
     }
   }
 );
 
-export const updatePost = createAsyncThunk(
-  'posts/updatePost',
-  async ({ postId, postData }, { rejectWithValue }) => {
-    try {
-      const response = await api.put(`/posts/${postId}`, postData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const deletePost = createAsyncThunk(
-  'posts/deletePost',
-  async (postId, { rejectWithValue }) => {
-    try {
-      await api.delete(`/posts/${postId}`);
-      return postId;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const likePost = createAsyncThunk(
-  'posts/likePost',
-  async (postId, { rejectWithValue }) => {
-    try {
-      const response = await api.post(`/posts/${postId}/like/`);  // Add slash
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to like post');
-    }
-  }
-);
+// ... keep your existing thunks (getPosts, getPost, createPost, etc.)
 
 const initialState = {
   posts: [],
@@ -86,6 +48,9 @@ const initialState = {
   total: 0,
   page: 1,
   perPage: 20,
+  // Add comments-related state
+  commentsLoading: false,
+  commentsError: null,
 };
 
 const postSlice = createSlice({
@@ -94,110 +59,133 @@ const postSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
+      state.commentsError = null;
     },
     clearCurrentPost: (state) => {
       state.currentPost = null;
     },
+    // Add a reducer to manually add comment to state for immediate feedback
+    addCommentToState: (state, action) => {
+      const { postId, comment } = action.payload;
+      
+      // Update posts array
+      const postIndex = state.posts.findIndex(p => p.public_id === postId);
+      if (postIndex !== -1) {
+        if (!state.posts[postIndex].comments) {
+          state.posts[postIndex].comments = [];
+        }
+        state.posts[postIndex].comments.unshift(comment);
+        state.posts[postIndex].comment_count = (state.posts[postIndex].comment_count || 0) + 1;
+      }
+      
+      // Update currentPost
+      if (state.currentPost && state.currentPost.public_id === postId) {
+        if (!state.currentPost.comments) {
+          state.currentPost.comments = [];
+        }
+        state.currentPost.comments.unshift(comment);
+        state.currentPost.comment_count = (state.currentPost.comment_count || 0) + 1;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
-      // Get Posts
-      .addCase(getPosts.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(getPosts.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.posts = action.payload.posts;
-        state.total = action.payload.total;
-        state.page = action.payload.page;
-        state.perPage = action.payload.per_page;
-      })
-      .addCase(getPosts.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload?.error || 'Failed to load posts';
-      })
+      // ... keep your existing reducers
       
-      // Get Single Post
-      .addCase(getPost.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      // Add Comment
+      .addCase(addComment.pending, (state) => {
+        state.commentsLoading = true;
+        state.commentsError = null;
       })
-      .addCase(getPost.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.currentPost = action.payload.post;
-      })
-      .addCase(getPost.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload?.error || 'Failed to load post';
-      })
-      
-      // Create Post
-      .addCase(createPost.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(createPost.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.posts.unshift(action.payload.post);
-      })
-      .addCase(createPost.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload?.error || 'Failed to create post';
-      })
-      
-      // Update Post (you might want to add this if not present)
-      .addCase(updatePost.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(updatePost.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const updatedPost = action.payload.post;
-        const index = state.posts.findIndex(p => p.public_id === updatedPost.public_id);
-        if (index !== -1) {
-          state.posts[index] = updatedPost;
-        }
-        if (state.currentPost && state.currentPost.public_id === updatedPost.public_id) {
-          state.currentPost = updatedPost;
-        }
-      })
-      .addCase(updatePost.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload?.error || 'Failed to update post';
-      })
-      
-      // Delete Post
-      .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter(p => p.public_id !== action.payload);
-        if (state.currentPost && state.currentPost.public_id === action.payload) {
-          state.currentPost = null;
-        }
-      })
-      
-      // Like Post
-      .addCase(likePost.fulfilled, (state, action) => {
-        const { liked, like_count } = action.payload;
-        const postId = action.meta.arg; // postId passed to thunk
+      .addCase(addComment.fulfilled, (state, action) => {
+        state.commentsLoading = false;
+        const { postId, comment } = action.payload;
         
-        // Update the post in Redux store
+        // Update posts array
         const postIndex = state.posts.findIndex(p => p.public_id === postId);
         if (postIndex !== -1) {
-          state.posts[postIndex].liked = liked;
-          state.posts[postIndex].like_count = like_count;
+          if (!state.posts[postIndex].comments) {
+            state.posts[postIndex].comments = [];
+          }
+          // Check if comment already exists to avoid duplicates
+          const exists = state.posts[postIndex].comments.some(c => c.id === comment.id);
+          if (!exists) {
+            state.posts[postIndex].comments.unshift(comment);
+            state.posts[postIndex].comment_count = (state.posts[postIndex].comment_count || 0) + 1;
+          }
         }
         
-        // Also update currentPost if it's the liked post
+        // Update currentPost
         if (state.currentPost && state.currentPost.public_id === postId) {
-          state.currentPost.liked = liked;
-          state.currentPost.like_count = like_count;
+          if (!state.currentPost.comments) {
+            state.currentPost.comments = [];
+          }
+          const exists = state.currentPost.comments.some(c => c.id === comment.id);
+          if (!exists) {
+            state.currentPost.comments.unshift(comment);
+            state.currentPost.comment_count = (state.currentPost.comment_count || 0) + 1;
+          }
         }
       })
-      .addCase(likePost.rejected, (state, action) => {
-        state.error = action.payload;
+      .addCase(addComment.rejected, (state, action) => {
+        state.commentsLoading = false;
+        state.commentsError = action.payload?.error || 'Failed to add comment';
+      })
+      
+      // Get Comments
+      .addCase(getComments.pending, (state) => {
+        state.commentsLoading = true;
+        state.commentsError = null;
+      })
+      .addCase(getComments.fulfilled, (state, action) => {
+        state.commentsLoading = false;
+        const { postId, comments } = action.payload;
+        
+        // Update posts array
+        const postIndex = state.posts.findIndex(p => p.public_id === postId);
+        if (postIndex !== -1) {
+          state.posts[postIndex].comments = comments;
+        }
+        
+        // Update currentPost
+        if (state.currentPost && state.currentPost.public_id === postId) {
+          state.currentPost.comments = comments;
+        }
+      })
+      .addCase(getComments.rejected, (state, action) => {
+        state.commentsLoading = false;
+        state.commentsError = action.payload?.error || 'Failed to load comments';
+      })
+      
+      // Delete Comment
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        const { postId, commentId } = action.payload;
+        
+        // Update posts array
+        const postIndex = state.posts.findIndex(p => p.public_id === postId);
+        if (postIndex !== -1 && state.posts[postIndex].comments) {
+          state.posts[postIndex].comments = state.posts[postIndex].comments.filter(
+            c => c.id !== commentId
+          );
+          state.posts[postIndex].comment_count = Math.max(
+            (state.posts[postIndex].comment_count || 0) - 1,
+            0
+          );
+        }
+        
+        // Update currentPost
+        if (state.currentPost && state.currentPost.public_id === postId && state.currentPost.comments) {
+          state.currentPost.comments = state.currentPost.comments.filter(
+            c => c.id !== commentId
+          );
+          state.currentPost.comment_count = Math.max(
+            (state.currentPost.comment_count || 0) - 1,
+            0
+          );
+        }
       });
   },
 });
 
-export const { clearError, clearCurrentPost } = postSlice.actions;
+export const { clearError, clearCurrentPost, addCommentToState } = postSlice.actions;
 export default postSlice.reducer;
