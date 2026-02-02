@@ -177,4 +177,5 @@ const postSlice = createSlice({
   },
 });
 
-
+export const { clearError, clearCurrentPost } = postSlice.actions;
+export default postSlice.reducer;
