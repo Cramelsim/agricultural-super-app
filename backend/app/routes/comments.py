@@ -130,4 +130,4 @@ def delete_comment(comment_id):
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f'Delete comment error: {str(e)}')
-        
+        return jsonify({'error': 'Internal server error'}), 500
