@@ -206,4 +206,4 @@ def toggle_like(post_id, path=None):
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f'Like error: {str(e)}')
-        return jsonify({'error': 'Internal server error'}), 50
+        return jsonify({'error': 'Internal server error'}), 500
