@@ -52,7 +52,7 @@ class User(db.Model):
             'following_count': Follow.query.filter_by(follower_id=self.id).count()
         }
 
-class Post(db.Model):
+
     __tablename__ = 'posts'
     
     id = db.Column(db.Integer, primary_key=True)
