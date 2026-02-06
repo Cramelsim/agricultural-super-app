@@ -88,7 +88,7 @@ class Post(db.Model):
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
 
-
+class Comment(db.Model):
     __tablename__ = 'comments'
     
     id = db.Column(db.Integer, primary_key=True)
