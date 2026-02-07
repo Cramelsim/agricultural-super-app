@@ -119,7 +119,6 @@ class Like(db.Model):
     
     __table_args__ = (db.UniqueConstraint('post_id', 'user_id', name='unique_like'),)
 
-class Follow(db.Model):
     __tablename__ = 'follows'
     
     id = db.Column(db.Integer, primary_key=True)
