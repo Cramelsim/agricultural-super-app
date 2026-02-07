@@ -132,7 +132,7 @@ class Follow(db.Model):
     follower = db.relationship('User', foreign_keys=[follower_id], backref='following')
     following = db.relationship('User', foreign_keys=[following_id], backref='followers')
 
-
+class Community(db.Model):
     __tablename__ = 'communities'
     
     id = db.Column(db.Integer, primary_key=True)
