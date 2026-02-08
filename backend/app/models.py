@@ -161,7 +161,7 @@ class Community(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
-class CommunityMember(db.Model):
+
     __tablename__ = 'community_members'
     
     id = db.Column(db.Integer, primary_key=True)
