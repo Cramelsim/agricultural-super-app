@@ -173,6 +173,7 @@ class CommunityMember(db.Model):
     
     user = db.relationship('User', backref='community_memberships')
 
+class Message(db.Model):
     __tablename__ = 'messages'
     
     id = db.Column(db.Integer, primary_key=True)
