@@ -97,7 +97,10 @@ def get_followers():
         per_page = request.args.get('per_page', 20, type=int)
         
         # Get followers
-        f
+        followers = Follow.query.filter_by(following_id=user.id).paginate(
+            page=page, per_page=per_page, error_out=False
+        )
+        
         follower_users = []
         for follow in followers.items:
             follower_user = User.query.get(follow.follower_id)
