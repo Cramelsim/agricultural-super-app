@@ -88,14 +88,7 @@ def get_following():
     
 @follows_bp.route('/followers', methods=['GET'])
 @jwt_required()
-def get_followers():
-    try:
-        current_user_id = get_jwt_identity()
-        user = User.query.filter_by(public_id=current_user_id).first()
-        
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 20, type=int)
-        
+
         # Get followers
         followers = Follow.query.filter_by(following_id=user.id).paginate(
             page=page, per_page=per_page, error_out=False
