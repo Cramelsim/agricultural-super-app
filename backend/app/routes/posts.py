@@ -183,17 +183,7 @@ def toggle_like(post_id, path=None):
         # Check if already liked
         existing_like = Like.query.filter_by(post_id=post.id, user_id=user.id).first()
         
-        if existing_like:
-            # Unlike
-            db.session.delete(existing_like)
-            post.like_count -= 1
-            liked = False
-        else:
-            # Like
-            new_like = Like(post_id=post.id, user_id=user.id)
-            db.session.add(new_like)
-            post.like_count += 1
-            liked = True
+        
         
         db.session.commit()
         
