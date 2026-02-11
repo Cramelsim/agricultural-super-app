@@ -167,7 +167,7 @@ def delete_post(post_id):
 # In posts.py, update the like route
 @posts_bp.route('/<string:post_id>/like', methods=['POST'], defaults={'path': ''})
 @posts_bp.route('/<string:post_id>/like/', methods=['POST'])
-
+@jwt_required()
 def toggle_like(post_id, path=None):
     try:
         current_user_id = get_jwt_identity()
