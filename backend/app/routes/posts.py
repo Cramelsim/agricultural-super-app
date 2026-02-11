@@ -197,6 +197,11 @@ def toggle_like(post_id, path=None):
         
         db.session.commit()
         
+        return jsonify({
+            'message': 'Post liked' if liked else 'Post unliked',
+            'liked': liked,
+            'like_count': post.like_count
+        }), 200
         
     except Exception as e:
         db.session.rollback()
