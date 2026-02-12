@@ -102,7 +102,7 @@ def get_post(post_id):
 
 @posts_bp.route('/<string:post_id>', methods=['PUT'])
 @jwt_required()
-def update_post(post_id):
+
     try:
         current_user_id = get_jwt_identity()
         user = User.query.filter_by(public_id=current_user_id).first()
