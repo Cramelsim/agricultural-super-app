@@ -65,7 +65,7 @@ def create_post():
                     image_urls.append(image_url)
         
         # Create post
-        
+        post = Post(
             title=data['title'],
             content=data['content'],
             author_id=user.id,
