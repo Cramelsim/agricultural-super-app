@@ -141,8 +141,7 @@ def update_post(post_id):
 
 @posts_bp.route('/<string:post_id>', methods=['DELETE'])
 @jwt_required()
-def delete_post(post_id):
-    try:
+
         current_user_id = get_jwt_identity()
         user = User.query.filter_by(public_id=current_user_id).first()
         post = Post.query.filter_by(public_id=post_id).first()
