@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
+from app import db
 from app.models import User, Community, CommunityMember, Post
 
 communities_bp = Blueprint('communities', __name__)
