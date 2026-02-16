@@ -33,7 +33,7 @@ def create_app(config_class=Config):
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.users import users_bp
-    from app.routes.posts import posts_bp
+   
     from app.routes.comments import comments_bp
     from app.routes.messages import messages_bp
     from app.routes.follows import follows_bp
