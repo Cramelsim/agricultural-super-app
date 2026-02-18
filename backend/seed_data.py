@@ -96,4 +96,4 @@ with app.app_context():
     
     db.session.commit()
     
- 
+    print("\n🌿 Database seeded successfully!")
