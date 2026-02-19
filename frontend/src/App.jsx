@@ -63,7 +63,7 @@ function App() {
               <Route path="profile/:id" element={<Profile />} />
               <Route path="profile" element={<Profile />} />
               <Route path="create-post" element={<CreatePost />} />
-              <Route path="post/:id" element={<PostDetail />} />
+              
             </Route>
           </Routes>
         </Router>
