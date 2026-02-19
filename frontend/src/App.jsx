@@ -61,7 +61,7 @@ function App() {
               <Route path="community" element={<Community />} />
               <Route path="messages" element={<Messages/>} />
               <Route path="profile/:id" element={<Profile />} />
-             
+              <Route path="profile" element={<Profile />} />
               <Route path="create-post" element={<CreatePost />} />
               <Route path="post/:id" element={<PostDetail />} />
             </Route>
