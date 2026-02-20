@@ -59,7 +59,7 @@ function App() {
               <Route path="feed" element={<Feed />} />
               <Route path="explore" element={<Explore />} />
               <Route path="community" element={<Community />} />
-              <Route path="messages" element={<Messages/>} />
+             
               <Route path="profile/:id" element={<Profile />} />
               <Route path="profile" element={<Profile />} />
               <Route path="create-post" element={<CreatePost />} />
