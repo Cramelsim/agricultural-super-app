@@ -53,7 +53,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Homepage />} />
+            
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register />} />
               <Route path="feed" element={<Feed />} />
