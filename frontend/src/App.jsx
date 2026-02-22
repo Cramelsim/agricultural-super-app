@@ -52,7 +52,7 @@ function App() {
         <CssBaseline />
         <Router>
           <Routes>
-            <Route path="/" element={<Layout />}>
+          
               <Route index element={<Homepage />} />
               <Route path="login" element={<Login/>} />
               <Route path="register" element={<Register />} />
