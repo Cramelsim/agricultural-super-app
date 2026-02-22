@@ -50,7 +50,7 @@ function App() {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        
+        <Router>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Homepage />} />
