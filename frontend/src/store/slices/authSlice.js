@@ -105,7 +105,12 @@ const authSlice = createSlice({
         state.error = action.payload?.error || 'Login failed';
       })
       
-      /
+      // Logout
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+      })
       
       // Get Current User
       .addCase(getCurrentUser.pending, (state) => {
