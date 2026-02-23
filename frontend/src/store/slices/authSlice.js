@@ -112,7 +112,22 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       })
       
-      
+      // Get Current User
+      .addCase(getCurrentUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+      })
+      .addCase(getCurrentUser.rejected, (state) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      });
+  },
+});
 
 export const { clearError } = authSlice.actions;
 export default authSlice.reducer;
