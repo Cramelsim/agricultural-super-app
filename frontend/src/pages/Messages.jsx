@@ -129,19 +129,7 @@ const MessagesPage = () => {
     }
   };
 
-  const getInitials = (name) => {
-    if (!name) return '?';
-    return name.charAt(0).toUpperCase();
-  };
-
-  if (isLoading && conversations.length === 0) {
-    return (
-      <Container maxWidth="lg" sx={{ py: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress />
-      </Container>
-    );
-  }
-
+ 
   return (
     <Container maxWidth="lg" sx={{ py: 4, height: '80vh' }}>
       <Typography variant="h4" gutterBottom>
