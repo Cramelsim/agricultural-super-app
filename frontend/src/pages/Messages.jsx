@@ -115,7 +115,10 @@ const MessagesPage = () => {
     }
   };
 
-  
+  const filteredConversations = conversations.filter(conv =>
+    conv.other_user?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    conv.last_message?.content?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const formatTime = (timestamp) => {
     if (!timestamp) return '';
