@@ -108,12 +108,6 @@ const MessagesPage = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
 
   const filteredConversations = conversations.filter(conv =>
     conv.other_user?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
