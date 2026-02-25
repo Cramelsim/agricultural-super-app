@@ -196,7 +196,8 @@ const MessagesPage = () => {
                         backgroundColor: 'primary.light',
                       },
                     }}
-                  
+                  >
+
                     <ListItemAvatar>
                       <Badge
                         badgeContent={conversation.unread_count || 0}
