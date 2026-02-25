@@ -174,7 +174,7 @@ const MessagesPage = () => {
                   disabled={!newConversationUser.trim() || isSending}
                 >
                   New
-               
+                </Button>
               </Box>
             </Box>
             
