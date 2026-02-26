@@ -148,19 +148,7 @@ const postSlice = createSlice({
       })
 
       // ===== LIKE POST =====
-      .addCase(likePost.fulfilled, (state, action) => {
-        const { liked, like_count } = action.payload;
-        const postId = action.meta.arg;
-
-        const post = state.posts.find(p => p.public_id === postId);
-        if (post) {
-          post.liked = liked;
-          post.like_count = like_count;
-        }
-      })
-      .addCase(likePost.rejected, (state, action) => {
-        state.error = action.payload;
-      })
+      
 
       // ===== DELETE POST =====
       .addCase(deletePost.fulfilled, (state, action) => {
