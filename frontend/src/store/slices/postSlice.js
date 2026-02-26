@@ -133,20 +133,7 @@ const postSlice = createSlice({
         state.error = action.payload;
       })
 
-      // ===== CREATE POST =====
-      .addCase(createPost.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(createPost.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.posts.unshift(action.payload.post);
-      })
-      .addCase(createPost.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-      })
-
+      /
       // ===== LIKE POST =====
       .addCase(likePost.fulfilled, (state, action) => {
         const { liked, like_count } = action.payload;
