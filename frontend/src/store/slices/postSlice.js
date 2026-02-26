@@ -163,18 +163,7 @@ const postSlice = createSlice({
       })
 
       // ===== DELETE POST =====
-      .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter(
-          p => p.public_id !== action.payload
-        );
-        if (
-          state.currentPost &&
-          state.currentPost.public_id === action.payload
-        ) {
-          state.currentPost = null;
-        }
-      });
-  },
+      
 });
 
 export const { clearError, clearCurrentPost } = postSlice.actions;
