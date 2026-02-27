@@ -155,7 +155,11 @@ const userSlice = createSlice({
       
       .addCase(checkFollow.fulfilled, (state, action) => {
         // Store follow status for current user if needed
+      })
       
+      .addCase(getFollowing.fulfilled, (state, action) => {
+        state.following = action.payload.following;
+      })
       
       .addCase(getFollowers.fulfilled, (state, action) => {
         state.followers = action.payload.followers;
