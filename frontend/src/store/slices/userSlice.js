@@ -149,7 +149,10 @@ const userSlice = createSlice({
         const { userId, is_following } = action.payload;
         if (state.currentUser && state.currentUser.public_id === userId) {
           // Update follower count for current user
-         
+          state.currentUser.follower_count += is_following ? 1 : -1;
+        }
+      })
+      
       .addCase(checkFollow.fulfilled, (state, action) => {
         // Store follow status for current user if needed
       })
