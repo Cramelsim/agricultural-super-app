@@ -75,17 +75,7 @@ export const checkFollow = createAsyncThunk(
   }
 );
 
-export const getFollowing = createAsyncThunk(
-  'users/getFollowing',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await api.get('/follows/following', { params });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
+
 
 export const getFollowers = createAsyncThunk(
   'users/getFollowers',
