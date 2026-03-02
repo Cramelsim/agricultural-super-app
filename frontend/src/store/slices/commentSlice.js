@@ -91,12 +91,7 @@ const commentSlice = createSlice({
         state.total += 1;
       })
       
-      .addCase(updateComment.fulfilled, (state, action) => {
-        const index = state.comments.findIndex(c => c.public_id === action.payload.comment.public_id);
-        if (index !== -1) {
-          state.comments[index] = action.payload.comment;
-        }
-      })
+      
       
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.comments = state.comments.filter(c => c.public_id !== action.payload);
