@@ -98,11 +98,7 @@ const commentSlice = createSlice({
         }
       })
       
-      .addCase(deleteComment.fulfilled, (state, action) => {
-        state.comments = state.comments.filter(c => c.public_id !== action.payload);
-        state.total = Math.max(0, state.total - 1);
-      });
-  },
+      
 });
 
 export const { clearComments, clearError } = commentSlice.actions;
