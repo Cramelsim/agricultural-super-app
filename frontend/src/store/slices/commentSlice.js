@@ -86,10 +86,6 @@ const commentSlice = createSlice({
         state.error = action.payload?.error || 'Failed to load comments';
       })
       
-      .addCase(createComment.fulfilled, (state, action) => {
-        state.comments.push(action.payload.comment);
-        state.total += 1;
-      })
       
       .addCase(updateComment.fulfilled, (state, action) => {
         const index = state.comments.findIndex(c => c.public_id === action.payload.comment.public_id);
