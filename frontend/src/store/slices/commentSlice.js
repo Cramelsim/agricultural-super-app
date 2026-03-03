@@ -81,6 +81,10 @@ const commentSlice = createSlice({
         state.total = action.payload.total;
         state.page = action.payload.page;
       })
+      .addCase(getComments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.error || 'Failed to load comments';
+      })
       
       .addCase(createComment.fulfilled, (state, action) => {
         state.comments.push(action.payload.comment);
