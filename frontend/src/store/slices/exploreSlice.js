@@ -67,7 +67,21 @@ export const fetchExploreTrending = createAsyncThunk(
   }
 );
 
-
+export const fetchExploreCategories = createAsyncThunk(
+  'explore/fetchExploreCategories',
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/explore/categories', { params });
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.error || 'Failed to fetch categories');
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch categories');
+    }
+  }
+);
 
 const exploreSlice = createSlice({
   name: 'explore',
