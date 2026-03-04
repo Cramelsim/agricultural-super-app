@@ -3,21 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 
 // Async thunk for explore data
-export const fetchExploreData = createAsyncThunk(
-  'explore/fetchExploreData',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await api.get('/explore', { params });
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        return rejectWithValue(response.data.error || 'Failed to fetch explore data');
-      }
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to fetch explore data');
-    }
-  }
-);
+
 
 export const fetchExploreExperts = createAsyncThunk(
   'explore/fetchExploreExperts',
