@@ -19,21 +19,7 @@ export const fetchExploreData = createAsyncThunk(
   }
 );
 
-export const fetchExploreExperts = createAsyncThunk(
-  'explore/fetchExploreExperts',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await api.get('/explore/experts', { params });
-      if (response.data.success) {
-        return response.data;
-      } else {
-        return rejectWithValue(response.data.error || 'Failed to fetch experts');
-      }
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.error || 'Failed to fetch experts');
-    }
-  }
-);
+
 
 export const fetchExploreCommunities = createAsyncThunk(
   'explore/fetchExploreCommunities',
