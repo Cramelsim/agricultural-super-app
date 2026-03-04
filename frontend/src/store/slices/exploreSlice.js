@@ -51,6 +51,21 @@ export const fetchExploreCommunities = createAsyncThunk(
   }
 );
 
+export const fetchExploreTrending = createAsyncThunk(
+  'explore/fetchExploreTrending',
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/explore/trending', { params });
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.error || 'Failed to fetch trending posts');
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch trending posts');
+    }
+  }
+);
 
 export const fetchExploreCategories = createAsyncThunk(
   'explore/fetchExploreCategories',
