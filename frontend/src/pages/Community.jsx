@@ -83,7 +83,15 @@ const CommunitiesPage = () => {
     }
   }, [dispatch, isAuthenticated, currentPage, searchTerm, category, sortBy]);
   
-  
+  const fetchCommunities = () => {
+    const params = {
+      page: currentPage,
+      per_page: 20,
+      search: searchTerm,
+      category: category || undefined,
+    };
+    dispatch(getCommunities(params));
+  };
   
   const handleSearch = () => {
     setCurrentPage(1);
