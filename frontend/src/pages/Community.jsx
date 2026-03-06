@@ -114,7 +114,12 @@ const CommunitiesPage = () => {
     });
   };
   
- 
+  const handleCreateCommunity = () => {
+    const formData = new FormData();
+    formData.append('name', newCommunity.name);
+    formData.append('description', newCommunity.description);
+    formData.append('is_public', newCommunity.is_public.toString());
+    
     if (newCommunity.category) {
       formData.append('category', newCommunity.category);
     }
