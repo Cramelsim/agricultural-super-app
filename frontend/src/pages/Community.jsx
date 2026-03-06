@@ -146,14 +146,6 @@ const CommunitiesPage = () => {
     });
   };
   
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setNewCommunity({
-        ...newCommunity,
-        image: e.target.files[0],
-      });
-    }
-  };
   
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
