@@ -104,7 +104,15 @@ const CommunitiesPage = () => {
     }
   };
   
-  
+  const handleJoinCommunity = (communityId) => {
+    dispatch(joinCommunity(communityId)).then(() => {
+      // Refresh communities after join/leave
+      fetchCommunities();
+      if (isAuthenticated) {
+        dispatch(getUserCommunities());
+      }
+    });
+  };
   
   const handleCreateCommunity = () => {
     const formData = new FormData();
