@@ -166,6 +166,12 @@ const CommunitiesPage = () => {
     setCurrentPage(1);
   };
   
+  const isUserMember = (community) => {
+    if (!isAuthenticated) return false;
+    
+    // Check if user is in userCommunities
+    return userCommunities.some(uc => uc.public_id === community.public_id);
+  };
   
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
