@@ -155,7 +155,9 @@ const CommunitiesPage = () => {
     }
   };
   
-  
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
   
   const clearFilters = () => {
     setSearchTerm('');
