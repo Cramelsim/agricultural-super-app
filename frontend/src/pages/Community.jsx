@@ -500,13 +500,7 @@ const CommunitiesPage = () => {
               Privacy Settings:
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button
-                variant={newCommunity.is_public ? "contained" : "outlined"}
-                onClick={() => setNewCommunity({ ...newCommunity, is_public: true })}
-                startIcon={<Public />}
-              >
-                Public
-              </Button>
+              
               <Button
                 variant={!newCommunity.is_public ? "contained" : "outlined"}
                 onClick={() => setNewCommunity({ ...newCommunity, is_public: false })}
