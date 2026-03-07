@@ -507,14 +507,7 @@ const CommunitiesPage = () => {
               >
                 Public
               </Button>
-              <Button
-                variant={!newCommunity.is_public ? "contained" : "outlined"}
-                onClick={() => setNewCommunity({ ...newCommunity, is_public: false })}
-                startIcon={<Lock />}
-              >
-                Private
-              </Button>
-            </Box>
+             
             <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
               {newCommunity.is_public 
                 ? 'Anyone can join and see content' 
