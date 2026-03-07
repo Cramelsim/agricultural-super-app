@@ -526,7 +526,13 @@ const CommunitiesPage = () => {
           <Button onClick={() => setOpenCreateDialog(false)}>
             Cancel
           </Button>
-         
+          <Button 
+            onClick={handleCreateCommunity} 
+            variant="contained"
+            disabled={!newCommunity.name.trim()}
+          >
+            Create Community
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>
