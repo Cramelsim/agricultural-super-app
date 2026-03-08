@@ -495,11 +495,7 @@ const CommunitiesPage = () => {
               </Typography>
             )}
           </Box>
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="body2" gutterBottom>
-              Privacy Settings:
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
+          
               <Button
                 variant={newCommunity.is_public ? "contained" : "outlined"}
                 onClick={() => setNewCommunity({ ...newCommunity, is_public: true })}
