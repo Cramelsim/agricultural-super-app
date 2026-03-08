@@ -474,9 +474,7 @@ const CommunitiesPage = () => {
             placeholder="e.g., Farming, Livestock, Technology"
           />
           <Box sx={{ mt: 2, mb: 2 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Community Image (optional)
-            </Typography>
+          
             <input
               accept="image/*"
               style={{ display: 'none' }}
