@@ -485,7 +485,10 @@ const CommunitiesPage = () => {
               onChange={handleImageChange}
             />
             <label htmlFor="community-image-upload">
-              
+              <Button variant="outlined" component="span">
+                Choose Image
+              </Button>
+            </label>
             {newCommunity.image && (
               <Typography variant="caption" sx={{ ml: 2 }}>
                 {newCommunity.image.name}
