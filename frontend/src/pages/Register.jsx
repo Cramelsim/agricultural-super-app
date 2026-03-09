@@ -267,4 +267,4 @@ const RegisterPage = () => {
   );
 };
 
-e
+export default RegisterPage;
