@@ -421,7 +421,16 @@ const CommunitiesPage = () => {
               </Grid>
               
               {/* Pagination */}
-              
+              {pages > 1 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                  <Pagination
+                    count={pages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="primary"
+                    showFirstButton
+                    showLastButton
+                  />
                 </Box>
               )}
             </>
