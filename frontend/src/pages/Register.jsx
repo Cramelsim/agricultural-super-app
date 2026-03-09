@@ -252,19 +252,6 @@ const RegisterPage = () => {
             </Grid>
             
             {/* Demo Data Notice */}
-            <Grid item xs={12}>
-              <Alert severity="info" sx={{ mt: 2 }}>
-                <Typography variant="body2">
-                  For demonstration purposes, this form doesn't connect to a backend.
-                  Fill in any data to see the form validation.
-                </Typography>
-              </Alert>
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
-    </Container>
-  );
-};
+         
 
 export default RegisterPage;
