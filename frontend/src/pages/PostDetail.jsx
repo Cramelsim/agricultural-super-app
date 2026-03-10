@@ -145,6 +145,24 @@ Remember, healthy soil means healthy plants!`,
           </Button>
         </Box>
         
-       
+        {/* Comments List */}
+        {post.comments.map((comment) => (
+          <Paper key={comment.id} variant="outlined" sx={{ p: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Avatar sx={{ width: 32, height: 32, mr: 1 }}>
+                {comment.user.charAt(0)}
+              </Avatar>
+              <Typography variant="subtitle2">{comment.user}</Typography>
+              <Typography variant="caption" color="textSecondary" sx={{ ml: 'auto' }}>
+                {comment.time}
+              </Typography>
+            </Box>
+            <Typography variant="body2">{comment.text}</Typography>
+          </Paper>
+        ))}
+      </Paper>
+    </Container>
+  );
+};
 
 export default PostDetailPage;
