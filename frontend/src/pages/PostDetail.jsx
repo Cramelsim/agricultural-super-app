@@ -129,21 +129,6 @@ Remember, healthy soil means healthy plants!`,
           Comments ({post.comments.length})
         </Typography>
         
-        {/* Comment Form */}
-        <Box component="form" onSubmit={handleSubmitComment} sx={{ mb: 4 }}>
-          <TextField
-            fullWidth
-            multiline
-            rows={3}
-            placeholder="Add a comment..."
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button type="submit" variant="contained">
-            Post Comment
-          </Button>
-        </Box>
         
         {/* Comments List */}
         {post.comments.map((comment) => (
