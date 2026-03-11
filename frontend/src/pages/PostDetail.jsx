@@ -74,21 +74,7 @@ Remember, healthy soil means healthy plants!`,
       
       <Paper elevation={3} sx={{ p: 4 }}>
         {/* Author Info */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Avatar sx={{ width: 60, height: 60, mr: 2 }}>
-            {post.author.name.charAt(0)}
-          </Avatar>
-          <Box>
-            <Typography variant="h6">{post.author.name}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              {post.author.role}
-            </Typography>
-            <Typography variant="caption" color="textSecondary">
-              {formatDistanceToNow(post.createdAt, { addSuffix: true })}
-            </Typography>
-          </Box>
-        </Box>
-        
+      
         {/* Post Content */}
         <Typography variant="h4" gutterBottom>
           {post.title}
