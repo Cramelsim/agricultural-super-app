@@ -106,7 +106,23 @@ Remember, healthy soil means healthy plants!`,
         </Box>
         
         {/* Actions */}
-      
+        <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+          <IconButton onClick={handleLike}>
+            {liked ? <Favorite color="error" /> : <FavoriteBorder />}
+            <Typography sx={{ ml: 1 }}>{likeCount}</Typography>
+          </IconButton>
+          
+          <IconButton>
+            <Comment />
+            <Typography sx={{ ml: 1 }}>{post.comments.length}</Typography>
+          </IconButton>
+          
+          <IconButton>
+            <Share />
+          </IconButton>
+        </Box>
+        
+        <Divider sx={{ mb: 4 }} />
         
         {/* Comments */}
         <Typography variant="h6" gutterBottom>
