@@ -99,11 +99,7 @@ Remember, healthy soil means healthy plants!`,
         </Typography>
         
         {/* Tags */}
-        <Box sx={{ mb: 3 }}>
-          {post.tags.map((tag, index) => (
-            <Chip key={index} label={tag} size="small" sx={{ mr: 1, mb: 1 }} />
-          ))}
-        </Box>
+        
         
         {/* Actions */}
         <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
