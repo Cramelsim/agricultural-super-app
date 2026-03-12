@@ -17,11 +17,7 @@ import { Favorite, FavoriteBorder, Comment, Share, ArrowBack } from '@mui/icons-
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 
-const PostDetailPage = () => {
-  const { id } = useParams();
-  const [comment, setComment] = useState('');
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(42);
+
   
   // Mock post data
   const post = {
