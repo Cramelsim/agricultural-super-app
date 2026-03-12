@@ -48,10 +48,7 @@ Remember, healthy soil means healthy plants!`,
     ],
   };
 
-  const handleLike = () => {
-    setLiked(!liked);
-    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
-  };
+ 
 
   const handleSubmitComment = (e) => {
     e.preventDefault();
