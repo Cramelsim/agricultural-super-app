@@ -191,7 +191,20 @@ const CommunitiesPage = () => {
       </Box>
       
       {/* Search and Filters */}
-   
+      <Box sx={{ mb: 4 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search communities..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={handleKeyPress}
+              InputProps={{
+                startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} />,
+              }}
+            />
           </Grid>
           <Grid item xs={12} md={3}>
             <FormControl fullWidth>
