@@ -159,7 +159,12 @@ const CommunitiesPage = () => {
     setCurrentPage(value);
   };
   
- 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setCategory('');
+    setSortBy('recent');
+    setCurrentPage(1);
+  };
   
   const isUserMember = (community) => {
     if (!isAuthenticated) return false;
