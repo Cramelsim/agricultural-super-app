@@ -128,7 +128,23 @@ const CommunitiesPage = () => {
       formData.append('image', newCommunity.image);
     }
     
-    
+    dispatch(createCommunity(formData)).then((success) => {
+      if (success) {
+        setOpenCreateDialog(false);
+        setNewCommunity({
+          name: '',
+          description: '',
+          category: '',
+          is_public: true,
+          image: null,
+        });
+        fetchCommunities();
+        if (isAuthenticated) {
+          dispatch(getUserCommunities());
+        }
+      }
+    });
+  };
   
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
