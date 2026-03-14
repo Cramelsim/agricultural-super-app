@@ -93,7 +93,10 @@ const CommunitiesPage = () => {
     dispatch(getCommunities(params));
   };
   
- 
+  const handleSearch = () => {
+    setCurrentPage(1);
+    fetchCommunities();
+  };
   
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
