@@ -98,7 +98,11 @@ const CommunitiesPage = () => {
     fetchCommunities();
   };
   
- 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
   
   const handleJoinCommunity = (communityId) => {
     dispatch(joinCommunity(communityId)).then(() => {
