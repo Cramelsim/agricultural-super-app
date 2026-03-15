@@ -118,9 +118,7 @@ def delete_comment(comment_id):
             return jsonify({'error': 'Unauthorized'}), 403
         
         # Update comment count on post
-        post = Post.query.get(comment.post_id)
-        if post:
-            post.comment_count = max(0, post.comment_count - 1)
+      
         
         db.session.delete(comment)
         db.session.commit()
