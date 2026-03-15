@@ -71,7 +71,14 @@ def create_comment(post_id):
         return jsonify({'error': 'Internal server error'}), 500
 @comments_bp.route('/<string:comment_id>', methods=['PUT'])
 @jwt_required()
-
+def update_comment(comment_id):
+    try:
+        current_user_id = get_jwt_identity()
+        user = User.query.filter_by(public_id=current_user_id).first()
+        comment = Comment.query.filter_by(public_id=comment_id).first()
+        
+        if not comment:
+            return jsonify({'error': 'Comment not found'}), 404
         
         # Check ownership
         if comment.user_id != user.id and user.user_type != 'admin':
