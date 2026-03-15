@@ -34,12 +34,7 @@ def get_comments(post_id):
     
 @comments_bp.route('/post/<string:post_id>', methods=['POST'])
 @jwt_required()
-def create_comment(post_id):
-    try:
-        current_user_id = get_jwt_identity()
-        user = User.query.filter_by(public_id=current_user_id).first()
-        post = Post.query.filter_by(public_id=post_id).first()
-        
+
         if not user or not post:
             return jsonify({'error': 'User or post not found'}), 404
         
