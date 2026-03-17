@@ -20,13 +20,7 @@ def get_comments(post_id):
             Comment.created_at.asc()
         ).paginate(page=page, per_page=per_page, error_out=False)
         
-        return jsonify({
-            'comments': [comment.to_dict() for comment in comments.items],
-            'total': comments.total,
-            'page': comments.page,
-            'per_page': comments.per_page,
-            'pages': comments.pages
-        }), 200
+       
         
     except Exception as e:
         current_app.logger.error(f'Get comments error: {str(e)}')
