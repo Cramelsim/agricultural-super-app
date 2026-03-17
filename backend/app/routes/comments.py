@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.models import User, Post, Comment
 
-comments_bp = Blueprint('comments', __name__)
+
 
 @comments_bp.route('/post/<string:post_id>', methods=['GET'])
 def get_comments(post_id):
